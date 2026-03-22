@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dra. Rayssa Silveira - Odontopediatria</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #7EC8FF;
+            --accent-color: #50C4E6;
+        }
+        
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+        }
+        
+        .hero-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        
+        .hero-custom h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .card-custom {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-custom:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
+        
+        .btn-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(74, 144, 226, 0.3);
+            color: white;
+        }
+        
+        .info-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .info-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .info-box h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .stat-item {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-item h4 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #FF5352 100%);
+            color: white;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .section-bg-light {
+            background-color: #FFF5F7;
+        }
+
+        /* Estilos do Formulário */
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 157, 0.25);
+        }
+
+        .form-label {
+            color: #2D3436;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 157, 0.25);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#home">
+                <span style="font-size: 1.5rem;">🦷</span> Dra. Rayssa Silveira
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#servicos">Serviços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sobre">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contato">Contato</a>
+                    </li>
+                </ul>
+                <a href="agendamentos.html" class="btn btn-custom ms-2">Agendar Consulta</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero-custom">
+        <div class="container">
+            <h2>Bem-vindo ao Mundo Mágico da Odontopediatria!</h2>
+            <p class="lead mb-4">Cuidado dentário infantil de qualidade com amor, paciência e divertimento</p>
+            <a href="agendamentos.html" class="btn btn-custom btn-lg">Agendar Agora</a>
+        </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="py-5 section-bg-light">
+        <div class="container">
+            <h2 class="section-title">Nossos Serviços</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body text-center">
+                            <div class="card-icon">🪥</div>
+                            <h5 class="card-title text-dark">Limpeza Infantil</h5>
+                            <p class="card-text text-muted">Limpeza gentil e divertida para dentes de leite e permanentes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body text-center">
+                            <div class="card-icon">🦷</div>
+                            <h5 class="card-title text-dark">Fluoretação</h5>
+                            <p class="card-text text-muted">Proteção extra para prevenir cáries e fortalecer os dentes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body text-center">
+                            <div class="card-icon">🍬</div>
+                            <h5 class="card-title text-dark">Tratamento de Cárie</h5>
+                            <p class="card-text text-muted">Tratamento seguro e indolor de cáries em crianças</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body text-center">
+                            <div class="card-icon">🌟</div>
+                            <h5 class="card-title text-dark">Selante Dentário</h5>
+                            <p class="card-text text-muted">Proteção para molares contra cáries e acidez</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body text-center">
+                            <div class="card-icon">📎</div>
+                            <h5 class="card-title text-dark">Aparelho Infantil</h5>
+                            <p class="card-text text-muted">Ortodontia lúdica para alinhar dentes em crescimento</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-custom h-100">
+                        <div class="card-body text-center">
+                            <div class="card-icon">🎉</div>
+                            <h5 class="card-title text-dark">Orientação de Higiene</h5>
+                            <p class="card-text text-muted">Ensinamos as crianças a amar a escovação dental</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre" class="py-5 bg-white">
+        <div class="container">
+            <h2 class="section-title">Sobre a Dra. Rayssa</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <img src="c:\Users\perei\Downloads\d77eddc9-4e58-4bda-bb10-98b4d2008d4f.jpg" alt="Dra. Rayssa Silveira da Silva" class="img-fluid rounded-4 shadow" style="max-width: 100%; height: auto;">
+                </div>
+                <div class="col-lg-7">
+                    <h3 style="color: var(--primary-color); font-weight: 700;">Dra. Rayssa Silveira da Silva</h3>
+                    <p class="lead mt-3"><strong>CRO-SP: 12345 | Especialista em Odontopediatria</strong></p>
+                    <p>A Dra. Rayssa Silveira da Silva é uma jovem profissional apaixonada por trabalhar com crianças. Recém-formada há 1 ano, ela já se dedica exclusivamente à odontopediatria, oferecendo atendimento especializado com muito amor, paciência e criatividade.</p>
+                    <p>Com formação atualizadássima nas melhores técnicas de atendimento infantil, ela cria um ambiente acolhedor e divertido onde as crianças adoram ir ao dentista. Aqui, cada consulta é uma aventura segura e feliz!</p>
+                </div>
+            </div>
+            <div class="row align-items-center mt-5">
+                <div class="col-lg-12">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="stat-item">
+                                <h4>500+</h4>
+                                <p class="mb-0">Sorrisinhos Felizes</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-item">
+                                <h4>1</h4>
+                                <p class="mb-0">Ano de Dedicação</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stat-item">
+                                <h4>100%</h4>
+                                <p class="mb-0">Aprovação Infantil</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="py-5 section-bg-light">
+        <div class="container">
+            <h2 class="section-title">Informações e Contato</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box">
+                        <h3>📍 Localização</h3>
+                        <p>Rua Martiniano da Silva, 549<br>Centro - Rio Verde, GO<br>CEP: 75935-000</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box">
+                        <h3>📞 Telefone</h3>
+                        <p><br><strong>WhatsApp:</strong> (64) 99973-4194</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box">
+                        <h3>🕐 Horário</h3>
+                        <p>Seg-Qua: 10:00 - 17:30<br>Sexta: 10:00 - 15:00<br>Sábado: 09:00 - 12:00</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box">
+                        <h3>✉️ Email</h3>
+                        <p>Silveirarayssa764@gmail.com<br></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-custom text-center">
+        <div class="container">
+            <p class="mb-2"><strong>&copy; 2025 Dra. Rayssa Silveira da Silva - Odontopediatria. Todos os direitos reservados.</strong></p>
+            <p>CRO-SP: 12345 | Especialista em Saúde Bucal Infantil | Desde 2024 | ❤️</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
