@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Cadastro - Dra. Rayssa Silveira</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #7EC8FF;
+            --accent-color: #50C4E6;
+            --success-color: #00C853;
+            --danger-color: #FF5252;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .auth-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .auth-header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #999;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .auth-tab-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-tab-btn.active {
+            color: var(--primary-color);
+        }
+
+        .auth-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .auth-content {
+            padding: 40px 30px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: #999;
+        }
+
+        .password-toggle {
+            position: relative;
+        }
+
+        .password-toggle .toggle-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 1.1rem;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+
+        .password-toggle .toggle-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(74, 144, 226, 0.3);
+            color: white;
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .form-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .form-link a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 0.9rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-voltar {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-voltar:hover {
+            color: var(--secondary-color);
+            transform: translateX(-5px);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+            color: #999;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 10px;
+            position: relative;
+        }
+
+        .info-box {
+            background: #f0f8ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #333;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <!-- HEADER -->
+        <div class="auth-header">
+            <h1>🦷 Dra. Rayssa Silveira</h1>
+            <p>Sistema de Agendamentos</p>
+        </div>
+
+        <!-- TABS -->
+        <div class="auth-tabs">
+            <button class="auth-tab-btn active" data-tab="login">
+                🔓 Login
+            </button>
+            <button class="auth-tab-btn" data-tab="cadastro">
+                ✏️ Cadastro
+            </button>
+        </div>
+
+        <!-- CONTEÚDO -->
+        <div class="auth-content">
+
+            <!-- ===== ABA LOGIN ===== -->
+            <div id="login-tab" class="auth-form active">
+                <form id="formLogin">
+                    <!-- Alerta -->
+                    <div id="alertLogin" class="alert"></div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label class="form-label">📧 Email</label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="loginEmail" 
+                            placeholder="seu@email.com" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Senha -->
+                    <div class="form-group">
+                        <label class="form-label">🔐 Senha</label>
+                        <div class="password-toggle">
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="loginSenha" 
+                                placeholder="Sua senha" 
+                                required
+                            >
+                            <button type="button" class="toggle-btn" onclick="togglePassword('loginSenha')">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Botão -->
+                    <button type="submit" class="btn-auth btn-login" id="btnLogin">
+                        🔓 Entrar
+                    </button>
+
+                    <div class="loading" id="loadingLogin"></div>
+
+                    <!-- Link Cadastro -->
+                    <p class="form-link">
+                        Não tem conta? <a onclick="mudarTab('cadastro')">Cadastre-se aqui</a>
+                    </p>
+
+                    <!-- Info -->
+                    <div class="info-box">
+                        ℹ️ <strong>Demo:</strong> Use email: <code>demo@test.com</code> | Senha: <code>123456</code>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ===== ABA CADASTRO ===== -->
+            <div id="cadastro-tab" class="auth-form" style="display: none;">
+                <form id="formCadastro">
+                    <!-- Alerta -->
+                    <div id="alertCadastro" class="alert"></div>
+
+                    <!-- Nome -->
+                    <div class="form-group">
+                        <label class="form-label">👤 Nome Completo</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="cadastroNome" 
+                            placeholder="Seu nome" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label class="form-label">📧 Email</label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="cadastroEmail" 
+                            placeholder="seu@email.com" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Telefone -->
+                    <div class="form-group">
+                        <label class="form-label">📱 Telefone/WhatsApp</label>
+                        <input 
+                            type="tel" 
+                            class="form-control" 
+                            id="cadastroTelefone" 
+                            placeholder="(64) 99973-4194" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Senha -->
+                    <div class="form-group">
+                        <label class="form-label">🔐 Senha</label>
+                        <div class="password-toggle">
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="cadastroSenha" 
+                                placeholder="Mínimo 6 caracteres" 
+                                required
+                            >
+                            <button type="button" class="toggle-btn" onclick="togglePassword('cadastroSenha')">
+                                👁️
+                            </button>
+                        </div>
+                        <small style="color: #999; margin-top: 5px; display: block;">
+                            A senha deve ter no mínimo 6 caracteres
+                        </small>
+                    </div>
+
+                    <!-- Confirmar Senha -->
+                    <div class="form-group">
+                        <label class="form-label">🔐 Confirmar Senha</label>
+                        <div class="password-toggle">
+                            <input 
+                                type="password" 
+                                class="form-control" 
+                                id="cadastroConfirme" 
+                                placeholder="Confirme sua senha" 
+                                required
+                            >
+                            <button type="button" class="toggle-btn" onclick="togglePassword('cadastroConfirme')">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Botão -->
+                    <button type="submit" class="btn-auth btn-login" id="btnCadastro">
+                        ✏️ Cadastrar-se
+                    </button>
+
+                    <div class="loading" id="loadingCadastro"></div>
+
+                    <!-- Link Login -->
+                    <p class="form-link">
+                        Já tem conta? <a onclick="mudarTab('login')">Faça login aqui</a>
+                    </p>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- Voltar -->
+        <div style="padding: 0 30px 20px;">
+            <a href="index.html" class="btn-voltar">← Voltar para Home</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ===== ALTERNAR VISIBILIDADE DE SENHA =====
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+        }
+
+        // ===== MUDAR ABA =====
+        function mudarTab(tabName) {
+            // Ocultar todas as abas
+            document.querySelectorAll('.auth-form').forEach(form => {
+                form.style.display = 'none';
+            });
+            document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Mostrar aba selecionada
+            document.getElementById(tabName + '-tab').style.display = 'block';
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        // ===== EVENT LISTENERS PARA ABAS =====
+        document.querySelectorAll('.auth-tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                mudarTab(this.dataset.tab);
+            });
+        });
+
+        // ===== MOSTRAR/OCULTAR ALERTA =====
+        function mostrarAlerta(tipo, mensagem, formType) {
+            const alertDiv = document.getElementById(`alert${formType.charAt(0).toUpperCase() + formType.slice(1)}`);
+            alertDiv.innerHTML = mensagem;
+            alertDiv.className = `alert alert-${tipo}`;
+            alertDiv.style.display = 'block';
+
+            setTimeout(() => {
+                alertDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // ===== FORMULÁRIO LOGIN =====
+        document.getElementById('formLogin').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const senha = document.getElementById('loginSenha').value;
+            const btnSubmit = document.getElementById('btnLogin');
+            const loading = document.getElementById('loadingLogin');
+
+            if (!email || !senha) {
+                mostrarAlerta('danger', '❌ Preencha todos os campos!', 'login');
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch('processar_auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        acao: 'login',
+                        email: email,
+                        senha: senha
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    // Salvar dados do usuário no localStorage
+                    localStorage.setItem('usuario', JSON.stringify(data.usuario));
+                    mostrarAlerta('success', '✅ Login realizado! Redirecionando...', 'login');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    mostrarAlerta('danger', '❌ ' + (data.erro || 'Erro ao fazer login'), 'login');
+                }
+            } catch (error) {
+                mostrarAlerta('danger', '❌ Erro: ' + error.message, 'login');
+            } finally {
+                btnSubmit.disabled = false;
+                loading.style.display = 'none';
+            }
+        });
+
+        // ===== FORMULÁRIO CADASTRO =====
+        document.getElementById('formCadastro').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('cadastroNome').value.trim();
+            const email = document.getElementById('cadastroEmail').value.trim();
+            const telefone = document.getElementById('cadastroTelefone').value.trim();
+            const senha = document.getElementById('cadastroSenha').value;
+            const confirme = document.getElementById('cadastroConfirme').value;
+            const btnSubmit = document.getElementById('btnCadastro');
+            const loading = document.getElementById('loadingCadastro');
+
+            // Validações
+            if (!nome || !email || !telefone || !senha || !confirme) {
+                mostrarAlerta('danger', '❌ Preencha todos os campos!', 'cadastro');
+                return;
+            }
+
+            if (senha.length < 6) {
+                mostrarAlerta('warning', '⚠️ A senha deve ter no mínimo 6 caracteres', 'cadastro');
+                return;
+            }
+
+            if (senha !== confirme) {
+                mostrarAlerta('danger', '❌ As senhas não conferem!', 'cadastro');
+                return;
+            }
+
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regexEmail.test(email)) {
+                mostrarAlerta('danger', '❌ Email inválido!', 'cadastro');
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch('processar_auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        acao: 'cadastro',
+                        nome: nome,
+                        email: email,
+                        telefone: telefone,
+                        senha: senha
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    mostrarAlerta('success', '✅ Cadastro realizado! Faça login para continuar', 'cadastro');
+                    setTimeout(() => {
+                        mudarTab('login');
+                        document.getElementById('formCadastro').reset();
+                    }, 1500);
+                } else {
+                    mostrarAlerta('danger', '❌ ' + (data.erro || 'Erro ao cadastrar'), 'cadastro');
+                }
+            } catch (error) {
+                mostrarAlerta('danger', '❌ Erro: ' + error.message, 'cadastro');
+            } finally {
+                btnSubmit.disabled = false;
+                loading.style.display = 'none';
+            }
+        });
+
+        // Auto-preencher demo
+        window.addEventListener('load', function() {
+            // Se desejar, auto-preencher campos de demo
+        });
+    </script>
+</body>
+</html>

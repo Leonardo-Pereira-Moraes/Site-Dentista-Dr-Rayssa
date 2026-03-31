@@ -375,49 +375,151 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        // ===== GERAR/OBTER CSRF TOKEN =====
+        function obterCSRFToken() {
+            let token = localStorage.getItem('csrf_token');
+            if (!token) {
+                token = 'dev_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('csrf_token', token);
+            }
+            return token;
+        }
+
         // Fazer a data mínima ser hoje
         const inputData = document.getElementById('data');
         const hoje = new Date().toISOString().split('T')[0];
         inputData.setAttribute('min', hoje);
 
-        // Formulário de Agendamento
+        // ===== FORMULÁRIO DE AGENDAMENTO =====
         document.getElementById('formularioAgendamento').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            // Desabilitar botão de submit
+            const btnSubmit = document.querySelector('button[type="submit"]');
+            const btnText = btnSubmit.innerHTML;
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '⏳ Enviando...';
+
             // Coletar dados
             const dados = {
-                nome: document.getElementById('nome').value,
-                email: document.getElementById('email').value,
-                telefone: document.getElementById('telefone').value,
-                nomeCrianca: document.getElementById('nomeCrianca').value,
+                nome: document.getElementById('nome').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                telefone: document.getElementById('telefone').value.trim(),
+                nomeCrianca: document.getElementById('nomeCrianca').value.trim(),
                 idade: document.getElementById('idade').value,
-                servico: document.getElementById('servico').value,
+                servico: document.getElementById('servico').value.trim(),
                 data: document.getElementById('data').value,
                 hora: document.getElementById('hora').value,
-                observacoes: document.getElementById('observacoes').value
+                observacoes: document.getElementById('observacoes').value.trim(),
+                csrf_token: obterCSRFToken()
             };
 
-            // Validação simples
-            if (!dados.nome || !dados.email || !dados.telefone || !dados.nomeCrianca) {
-                alert('Por favor, preencha todos os campos obrigatórios!');
+            // Validação no cliente
+            if (!dados.nome || !dados.email || !dados.telefone || !dados.nomeCrianca || !dados.servico || !dados.data || !dados.hora) {
+                mostrarErro('Por favor, preencha todos os campos obrigatórios!');
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = btnText;
                 return;
             }
 
-            // Log dos dados
-            console.log('Dados do Agendamento:', dados);
+            // Validação de email simples
+            const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regexEmail.test(dados.email)) {
+                mostrarErro('Por favor, insira um email válido!');
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = btnText;
+                return;
+            }
 
-            // Mostrar mensagem de sucesso
-            document.getElementById('mensagemSucesso').style.display = 'block';
+            // Enviar para servidor
+            fetch('processar_agendamento.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': dados.csrf_token
+                },
+                body: JSON.stringify(dados)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.erro || data.erros?.join(', ') || 'Erro ao processar agendamento');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.sucesso) {
+                    mostrarSucesso(data.mensagem, data.confirmacao);
+                    document.getElementById('formularioAgendamento').reset();
+                } else {
+                    mostrarErro(data.erro || 'Erro ao processar agendamento');
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                mostrarErro('Erro ao conectar com o servidor: ' + error.message);
+            })
+            .finally(() => {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = btnText;
+            });
+        });
+
+        // ===== FUNÇÕES DE MENSAGEM =====
+        function mostrarSucesso(mensagem, confirmacao) {
+            const divMensagem = document.getElementById('mensagemSucesso');
+            const form = document.getElementById('formularioAgendamento');
+            
+            // Remover classes de erro se houver
+            form.classList.remove('is-invalid');
+            
+            // Atualizar conteúdo
+            divMensagem.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <div style="font-size: 2rem; margin-right: 1rem;">✓</div>
+                    <div>
+                        <strong>${mensagem}</strong><br>
+                        <small>Consulta: <strong>${confirmacao.crianca}</strong> - ${confirmacao.data} às ${confirmacao.hora}</small>
+                    </div>
+                </div>
+            `;
+            divMensagem.className = 'alert alert-success mt-4';
+            divMensagem.style.display = 'block';
 
             // Scroll para mensagem
-            document.getElementById('mensagemSucesso').scrollIntoView({ behavior: 'smooth' });
+            divMensagem.scrollIntoView({ behavior: 'smooth' });
 
-            // Limpar formulário após 3 segundos
+            // Ocultar após 5 segundos
             setTimeout(() => {
-                document.getElementById('formularioAgendamento').reset();
-                document.getElementById('mensagemSucesso').style.display = 'none';
-            }, 3000);
-        });
+                divMensagem.style.display = 'none';
+            }, 5000);
+        }
+
+        function mostrarErro(mensagem) {
+            const divMensagem = document.getElementById('mensagemSucesso');
+            
+            // Atualizar conteúdo e classe
+            divMensagem.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <div style="font-size: 2rem; margin-right: 1rem; color: #dc3545;">⚠️</div>
+                    <div>
+                        <strong>Erro!</strong><br>
+                        <small>${mensagem}</small>
+                    </div>
+                </div>
+            `;
+            divMensagem.className = 'alert alert-danger mt-4';
+            divMensagem.style.display = 'block';
+
+            // Scroll para mensagem
+            divMensagem.scrollIntoView({ behavior: 'smooth' });
+
+            // Ocultar após 5 segundos
+            setTimeout(() => {
+                divMensagem.style.display = 'none';
+            }, 5000);
+        }
     </script>
 </body>
 </html>
