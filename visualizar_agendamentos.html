@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Agendamentos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        .btn-voltar {
+            background: #666;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-voltar:hover {
+            background: #555;
+        }
+
+        .filtros {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filtro-grupo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filtro-grupo label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .filtro-grupo input,
+        .filtro-grupo select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn-filtrar {
+            background: #00a86b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            align-self: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn-filtrar:hover {
+            background: #008c5c;
+        }
+
+        .btn-limpar {
+            background: #ccc;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .btn-limpar:hover {
+            background: #bbb;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-numero {
+            font-size: 32px;
+            font-weight: bold;
+            color: #00a86b;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .tabela-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #333;
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .status-pendente {
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-confirmado {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-cancelado {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .mensagem {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .mensagem-erro {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .mensagem-sucesso {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00a86b;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .sem-dados {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>📋 Painel de Agendamentos</h1>
+            <a href="dashboard.html" class="btn-voltar">← Voltar</a>
+        </div>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="filtros">
+            <div class="filtro-grupo">
+                <label for="filtroData">Data:</label>
+                <input type="date" id="filtroData">
+            </div>
+            <div class="filtro-grupo">
+                <label for="filtroServico">Serviço:</label>
+                <select id="filtroServico">
+                    <option value="">Todos</option>
+                </select>
+            </div>
+            <div class="filtro-grupo">
+                <label for="filtroStatus">Status:</label>
+                <select id="filtroStatus">
+                    <option value="">Todos</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="confirmado">Confirmado</option>
+                    <option value="cancelado">Cancelado</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; align-self: flex-end; margin-top: 20px;">
+                <button class="btn-filtrar" onclick="aplicarFiltros()">🔍 Filtrar</button>
+                <button class="btn-limpar" onclick="limparFiltros()">✕ Limpar</button>
+            </div>
+        </div>
+
+        <div id="conteudo">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Carregando agendamentos...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let agendamentosOriginais = [];
+
+        async function carregarAgendamentos(data = '', servico = '', status = '') {
+            try {
+                let url = 'admin_agendamentos.php';
+                const params = new URLSearchParams();
+                if (data) params.append('data', data);
+                if (servico) params.append('servico', servico);
+                if (status) params.append('status', status);
+                if (params.toString()) url += '?' + params.toString();
+
+                const response = await fetch(url);
+                const dados = await response.json();
+
+                if (!response.ok) {
+                    mostrarErro('Você precisa estar autenticado para acessar esta página. <a href="auth.html">Fazer login</a>');
+                    return;
+                }
+
+                agendamentosOriginais = dados.agendamentos;
+                
+                // Carregar filtros de serviços
+                const selectServico = document.getElementById('filtroServico');
+                dados.servicos.forEach(servico => {
+                    const option = document.createElement('option');
+                    option.value = servico;
+                    option.textContent = servico;
+                    selectServico.appendChild(option);
+                });
+
+                exibirStats(dados.total, dados.filtrados);
+                exibirAgendamentos(dados.agendamentos);
+            } catch (erro) {
+                mostrarErro('Erro ao carregar agendamentos: ' + erro.message);
+            }
+        }
+
+        function exibirStats(total, filtrados) {
+            const html = `
+                <div class="stat-card">
+                    <div class="stat-numero">${total}</div>
+                    <div class="stat-label">Total de Agendamentos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-numero">${filtrados}</div>
+                    <div class="stat-label">Agendamentos Filtrados</div>
+                </div>
+            `;
+            document.getElementById('stats').innerHTML = html;
+        }
+
+        function exibirAgendamentos(agendamentos) {
+            const conteudo = document.getElementById('conteudo');
+
+            if (agendamentos.length === 0) {
+                conteudo.innerHTML = '<div class="sem-dados">📭 Nenhum agendamento encontrado</div>';
+                return;
+            }
+
+            let tabela = `
+                <div class="tabela-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Telefone</th>
+                                <th>Serviço</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th>Status</th>
+                                <th>Data do Agendamento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            agendamentos.forEach(agendamento => {
+                const status = agendamento.status || 'pendente';
+                const classeStatus = `status-${status}`;
+                const dataAgendamento = new Date(agendamento.data_agendamento).toLocaleString('pt-BR');
+
+                tabela += `
+                    <tr>
+                        <td><strong>${escapeHtml(agendamento.nome)}</strong></td>
+                        <td>${escapeHtml(agendamento.email)}</td>
+                        <td>${escapeHtml(agendamento.telefone)}</td>
+                        <td>${escapeHtml(agendamento.servico)}</td>
+                        <td>${formatarData(agendamento.data)}</td>
+                        <td>${agendamento.hora}</td>
+                        <td><span class="${classeStatus}">${status.toUpperCase()}</span></td>
+                        <td>
+                            <small>${dataAgendamento}</small>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tabela += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            conteudo.innerHTML = tabela;
+        }
+
+        function aplicarFiltros() {
+            const data = document.getElementById('filtroData').value;
+            const servico = document.getElementById('filtroServico').value;
+            const status = document.getElementById('filtroStatus').value;
+            
+            carregarAgendamentos(data, servico, status);
+        }
+
+        function limparFiltros() {
+            document.getElementById('filtroData').value = '';
+            document.getElementById('filtroServico').value = '';
+            document.getElementById('filtroStatus').value = '';
+            carregarAgendamentos();
+        }
+
+        function mostrarErro(mensagem) {
+            document.getElementById('conteudo').innerHTML = 
+                `<div class="mensagem mensagem-erro">${mensagem}</div>`;
+        }
+
+        function formatarData(data) {
+            const [ano, mes, dia] = data.split('-');
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        function escapeHtml(texto) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return texto.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Carregar agendamentos ao abrir a página
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarAgendamentos();
+        });
+    </script>
+</body>
+</html>

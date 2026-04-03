@@ -582,8 +582,13 @@
                     // Salvar dados do usuário no localStorage
                     localStorage.setItem('usuario', JSON.stringify(data.usuario));
                     mostrarAlerta('success', '✅ Login realizado! Redirecionando...', 'login');
+                    
+                    // Verificar se veio de agendamentos
+                    const referrer = new URLSearchParams(window.location.search).get('referrer');
+                    const destino = referrer === 'agendamentos' ? 'agendamentos.html' : 'dashboard.html';
+                    
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = destino;
                     }, 1500);
                 } else {
                     mostrarAlerta('danger', '❌ ' + (data.erro || 'Erro ao fazer login'), 'login');

@@ -25,6 +25,14 @@ header('Content-Security-Policy: default-src \'self\'; script-src \'self\'');
 // ===== INICIAR SESSÃO PARA CSRF =====
 session_start();
 
+// ===== VERIFICAR AUTENTICAÇÃO =====
+if (empty($_SESSION['usuario_id'])) {
+    http_response_code(401);
+    echo json_encode(['erro' => 'Você precisa estar logado para agendar uma consulta. Por favor, faça login primeiro.']);
+    log_evento('SEGURANÇA', 'Tentativa de agendamento sem autenticação');
+    exit;
+}
+
 // ===== FUNÇÃO DE LOGGING =====
 function log_evento($tipo, $mensagem, $ip = '') {
     if (!$ip) $ip = $_SERVER['REMOTE_ADDR'] ?? 'DESCONHECIDO';
