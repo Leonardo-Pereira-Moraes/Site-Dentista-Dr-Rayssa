@@ -334,17 +334,19 @@
                 const response = await fetch('admin_agendamentos.php');
                 const data = await response.json();
 
-                if (data.sucesso) {
-                    todosAgendamentos = data.agendamentos;
-                    atualizarEstatisticas(data.agendamentos);
-                    preencherFiltros(data.servicos);
-                    renderizarTabela(data.agendamentos);
+                console.log('Dados recebidos do servidor:', data);
+
+                if (data.sucesso || (data.agendamentos && Array.isArray(data.agendamentos))) {
+                    todosAgendamentos = data.agendamentos || [];
+                    atualizarEstatisticas(todosAgendamentos);
+                    preencherFiltros(data.servicos || []);
+                    renderizarTabela(todosAgendamentos);
                 } else {
-                    mostrarErro(data.erro);
+                    mostrarErro(data.erro || 'Erro ao carregar agendamentos');
                 }
             } catch (error) {
                 console.error('Erro ao carregar agendamentos:', error);
-                mostrarErro('Erro ao conectar com o servidor');
+                mostrarErro('Erro ao conectar com o servidor: ' + error.message);
             } finally {
                 document.getElementById('loading').style.display = 'none';
             }
@@ -381,7 +383,10 @@
             const tbody = document.getElementById('agendamentosBody');
             tbody.innerHTML = '';
 
-            if (agendamentos.length === 0) {
+            console.log('Renderizando tabela com', agendamentos?.length || 0, 'agendamentos');
+
+            if (!agendamentos || agendamentos.length === 0) {
+                console.log('Nenhum agendamento para renderizar');
                 document.getElementById('tableContainer').style.display = 'none';
                 document.getElementById('noResults').style.display = 'block';
                 return;
@@ -390,46 +395,70 @@
             document.getElementById('noResults').style.display = 'none';
             document.getElementById('tableContainer').style.display = 'block';
 
-            agendamentos.forEach(agendamento => {
-                const tr = document.createElement('tr');
+            try {
+                agendamentos.forEach(agendamento => {
+                    const tr = document.createElement('tr');
 
-                const status = agendamento.status || 'pendente';
-                const statusClass = `status-${status}`;
+                    // Validar dados do agendamento
+                    if (!agendamento) {
+                        console.warn('Agendamento inválido:', agendamento);
+                        return;
+                    }
 
-                tr.innerHTML = `
-                    <td>
-                        <strong>${formatarData(agendamento.dataAgendada)}</strong><br>
-                        <small class="text-muted">${agendamento.horaAgendada}</small>
-                    </td>
-                    <td>
-                        <strong>${agendamento.nomeCrianca}</strong><br>
-                        <small class="text-muted">${agendamento.idade} anos</small>
-                    </td>
-                    <td>${agendamento.idade}</td>
-                    <td>${agendamento.servico.charAt(0).toUpperCase() + agendamento.servico.slice(1)}</td>
-                    <td>
-                        <strong>${agendamento.nome}</strong><br>
-                        <small class="text-muted">${agendamento.email}</small>
-                    </td>
-                    <td>${agendamento.telefone}</td>
-                    <td>
-                        <span class="status-badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
-                    </td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary me-1" onclick="verDetalhes('${agendamento.id}')">
-                            👁️ Ver
-                        </button>
-                        <button class="btn btn-sm btn-success me-1" onclick="alterarStatus('${agendamento.id}', 'confirmado')" ${status === 'confirmado' ? 'disabled' : ''}>
-                            ✓ Confirmar
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="alterarStatus('${agendamento.id}', 'cancelado')" ${status === 'cancelado' ? 'disabled' : ''}>
-                            ✗ Cancelar
-                        </button>
-                    </td>
-                `;
+                    const status = agendamento.status || 'pendente';
+                    const statusClass = `status-${status}`;
 
-                tbody.appendChild(tr);
-            });
+                    // Garantir que as datas estão formatadas
+                    const dataFormatada = agendamento.dataAgendada ? formatarData(agendamento.dataAgendada) : 'Data inválida';
+                    const horaAgendada = agendamento.horaAgendada || 'Hora não definida';
+                    const nomeCrianca = agendamento.nomeCrianca || 'Sem nome';
+                    const idade = agendamento.idade || '0';
+                    const servico = agendamento.servico || 'Serviço não definido';
+                    const nomeResponsavel = agendamento.nome || 'Sem nome';
+                    const email = agendamento.email || 'Sem email';
+                    const telefone = agendamento.telefone || 'Sem telefone';
+                    const idAgendamento = agendamento.id || 'sem-id';
+
+                    tr.innerHTML = `
+                        <td>
+                            <strong>${dataFormatada}</strong><br>
+                            <small class="text-muted">${horaAgendada}</small>
+                        </td>
+                        <td>
+                            <strong>${nomeCrianca}</strong><br>
+                            <small class="text-muted">${idade} anos</small>
+                        </td>
+                        <td>${idade}</td>
+                        <td>${servico.charAt(0).toUpperCase() + servico.slice(1)}</td>
+                        <td>
+                            <strong>${nomeResponsavel}</strong><br>
+                            <small class="text-muted">${email}</small>
+                        </td>
+                        <td>${telefone}</td>
+                        <td>
+                            <span class="status-badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="verDetalhes('${idAgendamento}')">
+                                👁️ Ver
+                            </button>
+                            <button class="btn btn-sm btn-success me-1" onclick="alterarStatus('${idAgendamento}', 'confirmado')" ${status === 'confirmado' ? 'disabled' : ''}>
+                                ✓ Confirmar
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="alterarStatus('${idAgendamento}', 'cancelado')" ${status === 'cancelado' ? 'disabled' : ''}>
+                                ✗ Cancelar
+                            </button>
+                        </td>
+                    `;
+
+                    tbody.appendChild(tr);
+                });
+
+                console.log('Tabela renderizada com sucesso');
+            } catch (error) {
+                console.error('Erro ao renderizar tabela:', error);
+                mostrarErro('Erro ao renderizar tabela: ' + error.message);
+            }
         }
 
         // Formatar data
@@ -440,8 +469,16 @@
 
         // Ver detalhes
         function verDetalhes(id) {
-            const agendamento = todosAgendamentos.find(a => a.id === id);
-            if (!agendamento) return;
+            console.log('Buscando detalhes do agendamento:', id);
+            
+            const agendamento = todosAgendamentos.find(a => a.id == id);
+            
+            console.log('Agendamento encontrado:', agendamento);
+
+            if (!agendamento) {
+                alert('Agendamento não encontrado');
+                return;
+            }
 
             agendamentoAtual = agendamento;
 

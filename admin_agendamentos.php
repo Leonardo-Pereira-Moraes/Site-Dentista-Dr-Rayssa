@@ -1,11 +1,11 @@
 <?php
 session_start();
+header('Content-Type: application/json; charset=utf-8');
 
 // Verificar se está autenticado
 if (!isset($_SESSION['usuario_id'])) {
-    header('Content-Type: application/json');
     http_response_code(401);
-    echo json_encode(['erro' => 'Você precisa estar logado para acessar esta página']);
+    echo json_encode(['erro' => 'Você precisa estar logado para acessar esta página', 'sucesso' => false]);
     exit;
 }
 
@@ -19,25 +19,28 @@ try {
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$usuario || !$usuario['is_admin']) {
-        header('Content-Type: application/json');
         http_response_code(403);
-        echo json_encode(['erro' => 'Acesso negado. Apenas administradores podem acessar esta página.']);
+        echo json_encode(['erro' => 'Acesso negado. Apenas administradores podem acessar esta página.', 'sucesso' => false]);
         exit;
     }
 } catch (PDOException $e) {
-    header('Content-Type: application/json');
     http_response_code(500);
-    echo json_encode(['erro' => 'Erro interno do servidor']);
+    echo json_encode(['erro' => 'Erro ao verificar permissões', 'sucesso' => false]);
     exit;
 }
 
 // Obter lista de agendamentos do banco
 try {
-    $stmt = $pdo->query("SELECT * FROM agendamentos ORDER BY dataAgendada DESC, horaAgendada DESC");
+    $stmt = $pdo->query("SELECT id, usuario_id, timestamp, nome, email, telefone, nomeCrianca, idade, servico, dataAgendada, horaAgendada, observacoes, status FROM agendamentos ORDER BY dataAgendada DESC, horaAgendada DESC");
     $todosAgendamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Se não houver agendamentos, retorna array vazio
+    if (!$todosAgendamentos) {
+        $todosAgendamentos = [];
+    }
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['erro' => 'Erro interno do servidor']);
+    echo json_encode(['erro' => 'Erro ao buscar agendamentos: ' . $e->getMessage(), 'sucesso' => false]);
     exit;
 }
 
@@ -68,17 +71,19 @@ if ($filtroStatus) {
     });
 }
 
+// Resetar chaves do array após filtragem
+$agendamentosFiltrados = array_values($agendamentosFiltrados);
+
 // Obter lista de serviços únicos para filtro
 $servicos = array_unique(array_column($todosAgendamentos, 'servico'));
 sort($servicos);
 
-header('Content-Type: application/json');
 echo json_encode([
     'sucesso' => true,
     'total' => count($todosAgendamentos),
     'filtrados' => count($agendamentosFiltrados),
-    'agendamentos' => array_values($agendamentosFiltrados),
-    'servicos' => $servicos,
+    'agendamentos' => $agendamentosFiltrados,
+    'servicos' => array_values($servicos),
     'filtros' => [
         'data' => $filtroData,
         'servico' => $filtroServico,

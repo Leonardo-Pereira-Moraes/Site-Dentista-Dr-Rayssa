@@ -171,6 +171,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="index.html#contato">Contato</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">Painel</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light btn-sm" onclick="fazerLogout()">
+                            🚪 Sair
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -595,6 +603,19 @@
             setTimeout(() => {
                 divMensagem.style.display = 'none';
             }, 5000);
+        }
+
+        // ===== FAZER LOGOUT =====
+        function fazerLogout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                fetch('processar_auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'logout' })
+                }).then(() => {
+                    window.location.href = 'index.html';
+                });
+            }
         }
     </script>
 </body>
