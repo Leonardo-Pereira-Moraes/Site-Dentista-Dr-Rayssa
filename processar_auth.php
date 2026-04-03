@@ -13,6 +13,9 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 header('X-XSS-Protection: 1; mode=block');
 
+// ===== INCLUIR CONEXÃO COM BANCO =====
+require_once 'db.php';
+
 // ===== FUNÇÃO DE LOGGING =====
 function log_evento($tipo, $mensagem) {
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'DESCONHECIDO';
@@ -42,52 +45,9 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 
 $acao = $dados['acao'] ?? '';
 
-// ===== ARQUIVO DE USUÁRIOS =====
-$usuarios_dir = dirname(__FILE__) . '/dados_auth';
-if (!is_dir($usuarios_dir)) {
-    mkdir($usuarios_dir, 0755, true);
-}
-
-$arquivo_usuarios = $usuarios_dir . '/usuarios.json';
-
-// ===== FUNÇÃO PARA LER USUÁRIOS =====
-function lerUsuarios() {
-    global $arquivo_usuarios;
-    if (!file_exists($arquivo_usuarios)) {
-        return [];
-    }
-    $conteudo = file_get_contents($arquivo_usuarios);
-    return json_decode($conteudo, true) ?? [];
-}
-
-// ===== FUNÇÃO PARA SALVAR USUÁRIOS =====
-function salvarUsuarios($usuarios) {
-    global $arquivo_usuarios;
-    $fp = fopen($arquivo_usuarios, 'w');
-    if (flock($fp, LOCK_EX)) {
-        fwrite($fp, json_encode($usuarios, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        flock($fp, LOCK_UN);
-    }
-    fclose($fp);
-    chmod($arquivo_usuarios, 0600); // Restrior read-write ao owner
-}
-
-// ===== CRIAR USUÁRIO DEMO SE NÃO EXISTIR =====
-$usuarios = lerUsuarios();
-if (empty($usuarios)) {
-    $usuarios = [
-        [
-            'id' => uniqid('user_', true),
-            'nome' => 'Usuário Teste',
-            'email' => 'demo@test.com',
-            'telefone' => '(64) 99999-9999',
-            'senha_hash' => password_hash('123456', PASSWORD_BCRYPT),
-            'data_cadastro' => date('Y-m-d H:i:s'),
-            'verificado' => true
-        ]
-    ];
-    salvarUsuarios($usuarios);
-}
+// ===== REMOVIDO: CRIAR USUÁRIO DEMO =====
+// O sistema agora não cria usuários demo automaticamente
+// Para criar admin, use o script criar_admin.php
 
 // ===== VALIDAR AÇÃO =====
 if ($acao === 'login') {
@@ -102,6 +62,7 @@ if ($acao === 'login') {
 
 // ===== FUNÇÃO LOGIN =====
 function processarLogin($dados) {
+    global $pdo;
     $email = $dados['email'] ?? '';
     $senha = $dados['senha'] ?? '';
 
@@ -123,19 +84,20 @@ function processarLogin($dados) {
 
     $email = strtolower(htmlspecialchars($email, ENT_QUOTES, 'UTF-8'));
 
-    // Buscar usuário
-    $usuarios = lerUsuarios();
-    $usuario_encontrado = null;
-
-    foreach ($usuarios as $usuario) {
-        if (strtolower($usuario['email']) === $email) {
-            $usuario_encontrado = $usuario;
-            break;
-        }
+    // Buscar usuário no banco
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = ?");
+        $stmt->execute([$email]);
+        $usuario = $stmt->fetch();
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['erro' => 'Erro interno do servidor']);
+        log_evento('ERRO', 'Erro ao buscar usuário: ' . $e->getMessage());
+        exit;
     }
 
     // Usuário não encontrado
-    if (!$usuario_encontrado) {
+    if (!$usuario) {
         // Usar delay para evitar brute force
         usleep(rand(500000, 1500000)); // 0.5-1.5 segundos
         http_response_code(401);
@@ -145,7 +107,7 @@ function processarLogin($dados) {
     }
 
     // Verificar senha (password_verify é seguro contra timing attacks)
-    if (!password_verify($senha, $usuario_encontrado['senha_hash'])) {
+    if (!password_verify($senha, $usuario['senha_hash'])) {
         usleep(rand(500000, 1500000)); // 0.5-1.5 segundos
         http_response_code(401);
         echo json_encode(['erro' => 'Email ou senha incorretos']);
@@ -155,15 +117,15 @@ function processarLogin($dados) {
 
     // Sucesso!
     session_start();
-    $_SESSION['usuario_id'] = $usuario_encontrado['id'];
-    $_SESSION['usuario_nome'] = $usuario_encontrado['nome'];
-    $_SESSION['usuario_email'] = $usuario_encontrado['email'];
+    $_SESSION['usuario_id'] = $usuario['id'];
+    $_SESSION['usuario_nome'] = $usuario['nome'];
+    $_SESSION['usuario_email'] = $usuario['email'];
     $_SESSION['login_time'] = time();
 
     // Usar Cookie seguro também
     setcookie(
         'usuario_sessao',
-        hash('sha256', $usuario_encontrado['id'] . $usuario_encontrado['email']),
+        hash('sha256', $usuario['id'] . $usuario['email']),
         [
             'expires' => time() + (30 * 24 * 60 * 60),
             'path' => '/',
@@ -189,6 +151,7 @@ function processarLogin($dados) {
 
 // ===== FUNÇÃO CADASTRO =====
 function processarCadastro($dados) {
+    global $pdo;
     $nome = $dados['nome'] ?? '';
     $email = $dados['email'] ?? '';
     $telefone = $dados['telefone'] ?? '';
@@ -223,39 +186,42 @@ function processarCadastro($dados) {
     $telefone = htmlspecialchars($telefone, ENT_QUOTES, 'UTF-8');
 
     // Verificar se email já existe
-    $usuarios = lerUsuarios();
-    foreach ($usuarios as $usuario) {
-        if (strtolower($usuario['email']) === $email) {
+    try {
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE email = ?");
+        $stmt->execute([$email]);
+        if ($stmt->fetchColumn() > 0) {
             http_response_code(409);
             echo json_encode(['erro' => 'Este email já está cadastrado']);
             log_evento('CADASTRO', "Email duplicado: {$email}");
             exit;
         }
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['erro' => 'Erro interno do servidor']);
+        log_evento('ERRO', 'Erro ao verificar email: ' . $e->getMessage());
+        exit;
     }
 
     // Criar novo usuário
-    $novo_usuario = [
-        'id' => uniqid('user_', true),
-        'nome' => $nome,
-        'email' => $email,
-        'telefone' => $telefone,
-        'senha_hash' => password_hash($senha, PASSWORD_BCRYPT),
-        'data_cadastro' => date('Y-m-d H:i:s'),
-        'verificado' => false // Email não verificado
-    ];
-
-    // Salvar
-    $usuarios[] = $novo_usuario;
-    salvarUsuarios($usuarios);
+    $id = uniqid('user_', true);
+    try {
+        $stmt = $pdo->prepare("INSERT INTO usuarios (id, nome, email, telefone, senha_hash, data_cadastro, verificado) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$id, $nome, $email, $telefone, password_hash($senha, PASSWORD_BCRYPT), date('Y-m-d H:i:s'), false]);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['erro' => 'Erro interno do servidor']);
+        log_evento('ERRO', 'Erro ao cadastrar usuário: ' . $e->getMessage());
+        exit;
+    }
 
     http_response_code(201);
     echo json_encode([
         'sucesso' => true,
         'mensagem' => 'Cadastro realizado com sucesso! Faça login para continuar.',
         'usuario' => [
-            'id' => $novo_usuario['id'],
-            'nome' => $novo_usuario['nome'],
-            'email' => $novo_usuario['email']
+            'id' => $id,
+            'nome' => $nome,
+            'email' => $email
         ]
     ]);
 

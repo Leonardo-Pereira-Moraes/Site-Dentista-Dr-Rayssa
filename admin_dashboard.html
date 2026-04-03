@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Dra. Rayssa Silveira</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #7EC8FF;
+            --accent-color: #50C4E6;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+
+        .card-custom {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .btn-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+            color: white;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pendente {
+            background-color: var(--warning-color);
+            color: #000;
+        }
+
+        .status-confirmado {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .status-cancelado {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .table-responsive {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f3f4;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stats-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <span style="font-size: 1.5rem;">🦷</span> Admin - Dra. Rayssa Silveira
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin_dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Site</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="logoutBtn" href="#">Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD HEADER -->
+    <div class="dashboard-header">
+        <div class="container">
+            <h1>🛠️ Painel Administrativo</h1>
+            <p>Gerencie todos os agendamentos da clínica</p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <!-- STATS CARDS -->
+        <div class="row mb-4" id="statsContainer">
+            <div class="col-md-3">
+                <div class="card card-custom stats-card">
+                    <div class="stats-number" id="totalAgendamentos">0</div>
+                    <div class="stats-label">Total de Agendamentos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-custom stats-card">
+                    <div class="stats-number text-warning" id="pendentes">0</div>
+                    <div class="stats-label">Pendentes</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-custom stats-card">
+                    <div class="stats-number text-success" id="confirmados">0</div>
+                    <div class="stats-label">Confirmados</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-custom stats-card">
+                    <div class="stats-number text-danger" id="cancelados">0</div>
+                    <div class="stats-label">Cancelados</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTERS -->
+        <div class="filter-section">
+            <h5>🔍 Filtros</h5>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="filtroData" class="form-label">Data</label>
+                    <input type="date" class="form-control" id="filtroData">
+                </div>
+                <div class="col-md-3">
+                    <label for="filtroServico" class="form-label">Serviço</label>
+                    <select class="form-select" id="filtroServico">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="filtroStatus" class="form-label">Status</label>
+                    <select class="form-select" id="filtroStatus">
+                        <option value="">Todos</option>
+                        <option value="pendente">Pendente</option>
+                        <option value="confirmado">Confirmado</option>
+                        <option value="cancelado">Cancelado</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-custom me-2" id="aplicarFiltros">Aplicar Filtros</button>
+                    <button class="btn btn-outline-secondary" id="limparFiltros">Limpar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- AGENDAMENTOS TABLE -->
+        <div class="card card-custom">
+            <div class="card-header">
+                <h5 class="mb-0">📅 Todos os Agendamentos</h5>
+            </div>
+            <div class="card-body">
+                <div id="loading" class="loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                    <p>Carregando agendamentos...</p>
+                </div>
+
+                <div id="errorContainer" class="error-message" style="display: none;"></div>
+
+                <div class="table-responsive" id="tableContainer" style="display: none;">
+                    <table class="table table-hover" id="agendamentosTable">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Criança</th>
+                                <th>Idade</th>
+                                <th>Serviço</th>
+                                <th>Responsável</th>
+                                <th>Contato</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="agendamentosBody">
+                            <!-- Dados serão inseridos aqui -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="noResults" class="text-center py-5" style="display: none;">
+                    <h5>Nenhum agendamento encontrado</h5>
+                    <p>Não há agendamentos que correspondam aos filtros aplicados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA DETALHES -->
+    <div class="modal fade" id="detalhesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalhes do Agendamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="detalhesContent">
+                    <!-- Conteúdo será inserido aqui -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-success" id="confirmarBtn">Confirmar</button>
+                    <button type="button" class="btn btn-danger" id="cancelarBtn">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        let todosAgendamentos = [];
+        let agendamentoAtual = null;
+
+        // Verificar autenticação e se é admin
+        async function verificarAdmin() {
+            try {
+                const response = await fetch('verificar_autenticacao.php');
+                const data = await response.json();
+
+                if (!data.autenticado) {
+                    window.location.href = 'auth.html';
+                    return false;
+                }
+
+                if (!data.is_admin) {
+                    alert('Acesso negado. Apenas administradores podem acessar esta página.');
+                    window.location.href = 'index.html';
+                    return false;
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Erro ao verificar autenticação:', error);
+                window.location.href = 'auth.html';
+                return false;
+            }
+        }
+
+        // Carregar agendamentos
+        async function carregarAgendamentos() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('tableContainer').style.display = 'none';
+                document.getElementById('errorContainer').style.display = 'none';
+
+                const response = await fetch('admin_agendamentos.php');
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    todosAgendamentos = data.agendamentos;
+                    atualizarEstatisticas(data.agendamentos);
+                    preencherFiltros(data.servicos);
+                    renderizarTabela(data.agendamentos);
+                } else {
+                    mostrarErro(data.erro);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar agendamentos:', error);
+                mostrarErro('Erro ao conectar com o servidor');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // Atualizar estatísticas
+        function atualizarEstatisticas(agendamentos) {
+            const total = agendamentos.length;
+            const pendentes = agendamentos.filter(a => (a.status || 'pendente') === 'pendente').length;
+            const confirmados = agendamentos.filter(a => a.status === 'confirmado').length;
+            const cancelados = agendamentos.filter(a => a.status === 'cancelado').length;
+
+            document.getElementById('totalAgendamentos').textContent = total;
+            document.getElementById('pendentes').textContent = pendentes;
+            document.getElementById('confirmados').textContent = confirmados;
+            document.getElementById('cancelados').textContent = cancelados;
+        }
+
+        // Preencher filtros
+        function preencherFiltros(servicos) {
+            const select = document.getElementById('filtroServico');
+            select.innerHTML = '<option value="">Todos</option>';
+
+            servicos.forEach(servico => {
+                const option = document.createElement('option');
+                option.value = servico;
+                option.textContent = servico.charAt(0).toUpperCase() + servico.slice(1);
+                select.appendChild(option);
+            });
+        }
+
+        // Renderizar tabela
+        function renderizarTabela(agendamentos) {
+            const tbody = document.getElementById('agendamentosBody');
+            tbody.innerHTML = '';
+
+            if (agendamentos.length === 0) {
+                document.getElementById('tableContainer').style.display = 'none';
+                document.getElementById('noResults').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('noResults').style.display = 'none';
+            document.getElementById('tableContainer').style.display = 'block';
+
+            agendamentos.forEach(agendamento => {
+                const tr = document.createElement('tr');
+
+                const status = agendamento.status || 'pendente';
+                const statusClass = `status-${status}`;
+
+                tr.innerHTML = `
+                    <td>
+                        <strong>${formatarData(agendamento.dataAgendada)}</strong><br>
+                        <small class="text-muted">${agendamento.horaAgendada}</small>
+                    </td>
+                    <td>
+                        <strong>${agendamento.nomeCrianca}</strong><br>
+                        <small class="text-muted">${agendamento.idade} anos</small>
+                    </td>
+                    <td>${agendamento.idade}</td>
+                    <td>${agendamento.servico.charAt(0).toUpperCase() + agendamento.servico.slice(1)}</td>
+                    <td>
+                        <strong>${agendamento.nome}</strong><br>
+                        <small class="text-muted">${agendamento.email}</small>
+                    </td>
+                    <td>${agendamento.telefone}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="verDetalhes('${agendamento.id}')">
+                            👁️ Ver
+                        </button>
+                        <button class="btn btn-sm btn-success me-1" onclick="alterarStatus('${agendamento.id}', 'confirmado')" ${status === 'confirmado' ? 'disabled' : ''}>
+                            ✓ Confirmar
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="alterarStatus('${agendamento.id}', 'cancelado')" ${status === 'cancelado' ? 'disabled' : ''}>
+                            ✗ Cancelar
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Formatar data
+        function formatarData(data) {
+            const d = new Date(data + 'T00:00:00');
+            return d.toLocaleDateString('pt-BR');
+        }
+
+        // Ver detalhes
+        function verDetalhes(id) {
+            const agendamento = todosAgendamentos.find(a => a.id === id);
+            if (!agendamento) return;
+
+            agendamentoAtual = agendamento;
+
+            const content = document.getElementById('detalhesContent');
+            const status = agendamento.status || 'pendente';
+
+            content.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>📅 Data e Hora</h6>
+                        <p>${formatarData(agendamento.dataAgendada)} às ${agendamento.horaAgendada}</p>
+
+                        <h6>👶 Dados da Criança</h6>
+                        <p><strong>Nome:</strong> ${agendamento.nomeCrianca}</p>
+                        <p><strong>Idade:</strong> ${agendamento.idade} anos</p>
+
+                        <h6>🦷 Serviço</h6>
+                        <p>${agendamento.servico.charAt(0).toUpperCase() + agendamento.servico.slice(1)}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>👨‍👩‍👧 Responsável</h6>
+                        <p><strong>Nome:</strong> ${agendamento.nome}</p>
+                        <p><strong>Email:</strong> ${agendamento.email}</p>
+                        <p><strong>Telefone:</strong> ${agendamento.telefone}</p>
+
+                        <h6>📝 Status</h6>
+                        <p><span class="status-badge status-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></p>
+
+                        ${agendamento.observacoes ? `
+                        <h6>💬 Observações</h6>
+                        <p>${agendamento.observacoes}</p>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            // Atualizar botões do modal
+            document.getElementById('confirmarBtn').style.display = status === 'confirmado' ? 'none' : 'inline-block';
+            document.getElementById('cancelarBtn').style.display = status === 'cancelado' ? 'none' : 'inline-block';
+
+            new bootstrap.Modal(document.getElementById('detalhesModal')).show();
+        }
+
+        // Alterar status
+        async function alterarStatus(id, novoStatus) {
+            if (!confirm(`Tem certeza que deseja ${novoStatus === 'confirmado' ? 'confirmar' : 'cancelar'} este agendamento?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('alterar_status_agendamento.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        status: novoStatus
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    // Recarregar agendamentos
+                    await carregarAgendamentos();
+                    alert(`Agendamento ${novoStatus === 'confirmado' ? 'confirmado' : 'cancelado'} com sucesso!`);
+                } else {
+                    alert('Erro: ' + data.erro);
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao alterar status do agendamento');
+            }
+        }
+
+        // Aplicar filtros
+        function aplicarFiltros() {
+            const data = document.getElementById('filtroData').value;
+            const servico = document.getElementById('filtroServico').value;
+            const status = document.getElementById('filtroStatus').value;
+
+            let filtrados = todosAgendamentos;
+
+            if (data) {
+                filtrados = filtrados.filter(a => a.dataAgendada === data);
+            }
+
+            if (servico) {
+                filtrados = filtrados.filter(a => a.servico.toLowerCase() === servico.toLowerCase());
+            }
+
+            if (status) {
+                filtrados = filtrados.filter(a => (a.status || 'pendente') === status);
+            }
+
+            atualizarEstatisticas(filtrados);
+            renderizarTabela(filtrados);
+        }
+
+        // Limpar filtros
+        function limparFiltros() {
+            document.getElementById('filtroData').value = '';
+            document.getElementById('filtroServico').value = '';
+            document.getElementById('filtroStatus').value = '';
+            atualizarEstatisticas(todosAgendamentos);
+            renderizarTabela(todosAgendamentos);
+        }
+
+        // Mostrar erro
+        function mostrarErro(mensagem) {
+            document.getElementById('errorContainer').textContent = mensagem;
+            document.getElementById('errorContainer').style.display = 'block';
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Tem certeza que deseja sair?')) {
+                fetch('processar_auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'logout' })
+                }).then(() => {
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+
+        // Eventos dos botões do modal
+        document.getElementById('confirmarBtn').addEventListener('click', function() {
+            if (agendamentoAtual) {
+                alterarStatus(agendamentoAtual.id, 'confirmado');
+                bootstrap.Modal.getInstance(document.getElementById('detalhesModal')).hide();
+            }
+        });
+
+        document.getElementById('cancelarBtn').addEventListener('click', function() {
+            if (agendamentoAtual) {
+                alterarStatus(agendamentoAtual.id, 'cancelado');
+                bootstrap.Modal.getInstance(document.getElementById('detalhesModal')).hide();
+            }
+        });
+
+        // Eventos dos filtros
+        document.getElementById('aplicarFiltros').addEventListener('click', aplicarFiltros);
+        document.getElementById('limparFiltros').addEventListener('click', limparFiltros);
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (await verificarAdmin()) {
+                await carregarAgendamentos();
+            }
+        });
+    </script>
+</body>
+</html>

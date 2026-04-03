@@ -9,34 +9,37 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
-// Criar diretório de dados se não existir
-if (!is_dir('dados')) {
-    mkdir('dados', 0755, true);
-}
+// ===== INCLUIR CONEXÃO COM BANCO =====
+require_once 'db.php';
 
-// Obter lista de arquivos de agendamentos
-$arquivos = glob('dados/agendamentos_*.json');
-sort($arquivos);
+// Verificar se o usuário é admin
+try {
+    $stmt = $pdo->prepare("SELECT is_admin FROM usuarios WHERE id = ?");
+    $stmt->execute([$_SESSION['usuario_id']]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$todosAgendamentos = [];
-
-// Ler todos os arquivos
-foreach ($arquivos as $arquivo) {
-    if (file_exists($arquivo)) {
-        $conteudo = file_get_contents($arquivo);
-        $dados = json_decode($conteudo, true);
-        if (is_array($dados)) {
-            $todosAgendamentos = array_merge($todosAgendamentos, $dados);
-        }
+    if (!$usuario || !$usuario['is_admin']) {
+        header('Content-Type: application/json');
+        http_response_code(403);
+        echo json_encode(['erro' => 'Acesso negado. Apenas administradores podem acessar esta página.']);
+        exit;
     }
+} catch (PDOException $e) {
+    header('Content-Type: application/json');
+    http_response_code(500);
+    echo json_encode(['erro' => 'Erro interno do servidor']);
+    exit;
 }
 
-// Ordenar por data e hora (mais recentes primeiro)
-usort($todosAgendamentos, function($a, $b) {
-    $dataA = strtotime($a['data'] . ' ' . $a['hora']);
-    $dataB = strtotime($b['data'] . ' ' . $b['hora']);
-    return $dataB - $dataA;
-});
+// Obter lista de agendamentos do banco
+try {
+    $stmt = $pdo->query("SELECT * FROM agendamentos ORDER BY dataAgendada DESC, horaAgendada DESC");
+    $todosAgendamentos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['erro' => 'Erro interno do servidor']);
+    exit;
+}
 
 // Filtros
 $filtroData = $_GET['data'] ?? '';
@@ -48,7 +51,7 @@ $agendamentosFiltrados = $todosAgendamentos;
 
 if ($filtroData) {
     $agendamentosFiltrados = array_filter($agendamentosFiltrados, function($a) use ($filtroData) {
-        return $a['data'] === $filtroData;
+        return $a['dataAgendada'] === $filtroData;
     });
 }
 

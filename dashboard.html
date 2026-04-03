@@ -66,8 +66,25 @@
             background: #ff5252;
         }
 
-        .btn-logout:hover {
-            background: #e53935;
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pendente {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .status-confirmado {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .status-cancelado {
+            background-color: #dc3545;
             color: white;
         }
 
@@ -264,40 +281,147 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // ===== FAZER LOGOUT =====
-        function fazerLogout() {
-            if (confirm('Tem certeza que deseja sair?')) {
-                localStorage.removeItem('usuario');
-                // Limpar session no servidor também seria ideal
+        // ===== CARREGAR DADOS DO USUÁRIO =====
+        async function carregarDadosUsuario() {
+            try {
+                const response = await fetch('verificar_autenticacao.php');
+                const data = await response.json();
+
+                if (!data.autenticado) {
+                    window.location.href = 'auth.html';
+                    return;
+                }
+
+                document.getElementById('nomeUsuario').textContent = data.usuario.nome;
+                document.getElementById('emailUsuario').textContent = data.usuario.email;
+
+                // Carregar agendamentos
+                await carregarAgendamentos();
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                alert('Erro ao carregar dados do usuário');
                 window.location.href = 'auth.html';
             }
         }
 
-        // ===== CARREGAR DADOS DO USUÁRIO =====
-        window.addEventListener('load', function() {
-            const usuarioJson = localStorage.getItem('usuario');
-            
-            if (!usuarioJson) {
-                alert('Você precisa estar logado para ver esta página');
-                window.location.href = 'auth.html';
+        // ===== CARREGAR AGENDAMENTOS =====
+        async function carregarAgendamentos() {
+            try {
+                const response = await fetch('meus_agendamentos.php');
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    renderizarAgendamentos(data.agendamentos);
+                } else {
+                    console.error('Erro ao carregar agendamentos:', data.erro);
+                    mostrarMensagemErro('Erro ao carregar agendamentos');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar agendamentos:', error);
+                mostrarMensagemErro('Erro ao conectar com o servidor');
+            }
+        }
+
+        // ===== RENDERIZAR AGENDAMENTOS =====
+        function renderizarAgendamentos(agendamentos) {
+            const lista = document.getElementById('agendamentosList');
+
+            if (agendamentos.length === 0) {
+                lista.innerHTML = `
+                    <li class="text-center text-muted py-4">
+                        <p>Nenhum agendamento ainda.</p>
+                        <a href="agendamentos.html" class="btn btn-custom btn-sm">
+                            Agendar Consulta
+                        </a>
+                    </li>
+                `;
                 return;
             }
 
-            const usuario = JSON.parse(usuarioJson);
-            document.getElementById('nomeUsuario').textContent = usuario.nome;
-            document.getElementById('emailUsuario').textContent = usuario.email;
+            lista.innerHTML = '';
 
-            // Carregar agendamentos do localStorage (demo)
-            carregarAgendamentos();
-        });
+            agendamentos.forEach(agendamento => {
+                const status = agendamento.status || 'pendente';
+                const statusClass = getStatusClass(status);
+                const statusText = getStatusText(status);
 
-        // ===== CARREGAR AGENDAMENTOS =====
-        function carregarAgendamentos() {
-            // No futuro, isso viria de um servidor
-            const agendamentosJson = localStorage.getItem('agendamentos_usuario');
+                const li = document.createElement('li');
+                li.className = 'agendamento-item';
+                li.innerHTML = `
+                    <div class="agendamento-header">
+                        <div class="agendamento-info">
+                            <h6>${agendamento.nomeCrianca} - ${agendamento.idade} anos</h6>
+                            <p class="mb-1"><strong>Serviço:</strong> ${agendamento.servico.charAt(0).toUpperCase() + agendamento.servico.slice(1)}</p>
+                            <p class="mb-1"><strong>Data:</strong> ${formatarData(agendamento.dataAgendada)} às ${agendamento.horaAgendada}</p>
+                            <p class="mb-0"><strong>Status:</strong> <span class="status-badge ${statusClass}">${statusText}</span></p>
+                        </div>
+                        <div class="agendamento-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="verDetalhes('${agendamento.id}')">
+                                👁️ Ver Detalhes
+                            </button>
+                        </div>
+                    </div>
+                    ${agendamento.observacoes ? `<div class="agendamento-observacoes"><strong>Observações:</strong> ${agendamento.observacoes}</div>` : ''}
+                `;
+
+                lista.appendChild(li);
+            });
+        }
+
+        // ===== FUNÇÕES AUXILIARES =====
+        function formatarData(data) {
+            const d = new Date(data + 'T00:00:00');
+            return d.toLocaleDateString('pt-BR');
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'confirmado': return 'status-confirmado';
+                case 'cancelado': return 'status-cancelado';
+                default: return 'status-pendente';
+            }
+        }
+
+        function getStatusText(status) {
+            switch (status) {
+                case 'confirmado': return 'Confirmado';
+                case 'cancelado': return 'Cancelado';
+                default: return 'Pendente';
+            }
+        }
+
+        function verDetalhes(id) {
+            // Por enquanto, apenas um alert. Pode ser expandido para modal
+            alert('Funcionalidade de detalhes será implementada em breve.');
+        }
+
+        function mostrarMensagemErro(mensagem) {
             const lista = document.getElementById('agendamentosList');
+            lista.innerHTML = `
+                <li class="text-center text-danger py-4">
+                    <p>${mensagem}</p>
+                    <button class="btn btn-custom btn-sm" onclick="carregarAgendamentos()">
+                        Tentar Novamente
+                    </button>
+                </li>
+            `;
+        }
 
-            if (!agendamentosJson) {
+        // ===== FAZER LOGOUT =====
+        function fazerLogout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                fetch('processar_auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'logout' })
+                }).then(() => {
+                    window.location.href = 'index.html';
+                });
+            }
+        }
+
+        // ===== INICIALIZAR =====
+        window.addEventListener('load', carregarDadosUsuario);
                 return; // Manter mensagem padrão
             }
 

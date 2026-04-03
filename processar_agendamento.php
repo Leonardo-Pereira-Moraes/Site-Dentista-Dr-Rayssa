@@ -25,6 +25,9 @@ header('Content-Security-Policy: default-src \'self\'; script-src \'self\'');
 // ===== INICIAR SESSÃO PARA CSRF =====
 session_start();
 
+// ===== INCLUIR CONEXÃO COM BANCO =====
+require_once 'db.php';
+
 // ===== VERIFICAR AUTENTICAÇÃO =====
 if (empty($_SESSION['usuario_id'])) {
     http_response_code(401);
@@ -158,19 +161,24 @@ if (empty($dados['telefone'])) {
 if (empty($dados['nomeCrianca'])) {
     $erros[] = 'Nome da criança é obrigatório';
 } elseif (strlen($dados['nomeCrianca']) < 2 || strlen($dados['nomeCrianca']) > 100) {
-    $erros[] = 'Nome da criança inválido';
+    $erros[] = 'Nome da criança deve ter entre 2 e 100 caracteres';
+} elseif (!preg_match('/^[a-záàâãéèêíïóôõöúçñ\s\'-]+$/i', $dados['nomeCrianca'])) {
+    $erros[] = 'Nome da criança contém caracteres inválidos';
 }
 
 // Validar Idade
-if (!empty($dados['idade'])) {
-    if (!is_numeric($dados['idade']) || $dados['idade'] < 0 || $dados['idade'] > 18) {
-        $erros[] = 'Idade deve estar entre 0 e 18 anos';
-    }
+if (empty($dados['idade']) && $dados['idade'] !== '0') {
+    $erros[] = 'Idade é obrigatória';
+} elseif (!is_numeric($dados['idade']) || $dados['idade'] < 0 || $dados['idade'] > 18) {
+    $erros[] = 'Idade deve estar entre 0 e 18 anos';
 }
 
 // Validar Serviço
+$servicos_validos = ['limpeza', 'fluoretacao', 'carie', 'selante', 'aparelho', 'higiene', 'avaliacao'];
 if (empty($dados['servico'])) {
     $erros[] = 'Serviço é obrigatório';
+} elseif (!in_array($dados['servico'], $servicos_validos)) {
+    $erros[] = 'Serviço inválido';
 } elseif (strlen($dados['servico']) > 100) {
     $erros[] = 'Serviço muito longo';
 }
@@ -215,6 +223,7 @@ $observacoes = !empty($dados['observacoes']) ? htmlspecialchars($dados['observac
 // ===== SALVAR AGENDAMENTO =====
 $dados_agendamento = [
     'id' => uniqid('ag_', true),
+    'usuario_id' => $_SESSION['usuario_id'],
     'timestamp' => date('Y-m-d H:i:s'),
     'ip_origem' => $ip,
     'nome' => $nome,
@@ -225,23 +234,34 @@ $dados_agendamento = [
     'servico' => $servico,
     'dataAgendada' => $data,
     'horaAgendada' => $hora,
-    'observacoes' => $observacoes
+    'observacoes' => $observacoes,
+    'status' => 'pendente'
 ];
 
-// Criar diretório de dados se não existir
-$dados_dir = dirname(__FILE__) . '/dados';
-if (!is_dir($dados_dir)) {
-    mkdir($dados_dir, 0755, true);
+try {
+    $stmt = $pdo->prepare("INSERT INTO agendamentos (id, usuario_id, timestamp, ip_origem, nome, email, telefone, nomeCrianca, idade, servico, dataAgendada, horaAgendada, observacoes, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->execute([
+        $dados_agendamento['id'],
+        $dados_agendamento['usuario_id'],
+        $dados_agendamento['timestamp'],
+        $dados_agendamento['ip_origem'],
+        $dados_agendamento['nome'],
+        $dados_agendamento['email'],
+        $dados_agendamento['telefone'],
+        $dados_agendamento['nomeCrianca'],
+        $dados_agendamento['idade'],
+        $dados_agendamento['servico'],
+        $dados_agendamento['dataAgendada'],
+        $dados_agendamento['horaAgendada'],
+        $dados_agendamento['observacoes'],
+        $dados_agendamento['status']
+    ]);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['erro' => 'Erro interno do servidor']);
+    log_evento('ERRO', 'Erro ao salvar agendamento: ' . $e->getMessage());
+    exit;
 }
-
-// Salvar em arquivo JSON (método seguro usando lock)
-$arquivo_dados = $dados_dir . '/agendamentos_' . date('Y-m-d') . '.json';
-$fp = fopen($arquivo_dados, 'a');
-if (flock($fp, LOCK_EX)) {
-    fwrite($fp, json_encode($dados_agendamento, JSON_UNESCAPED_UNICODE) . "\n");
-    flock($fp, LOCK_UN);
-}
-fclose($fp);
 
 // Registrar sucesso no log
 log_evento('AGENDAMENTO', 'Novo agendamento recebido: ' . $dados_agendamento['id'] . ' - ' . $nome);

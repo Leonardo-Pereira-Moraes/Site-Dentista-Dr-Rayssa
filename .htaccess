@@ -1,11 +1,5 @@
 # Proteção de segurança com .htaccess
 
-# ===== REJEITAR ACESSO DIRETO AO DIRETÓRIO DE DADOS =====
-<DirectoryMatch "^.*/(dados|dados_auth|logs|cache)">
-    Order allow,deny
-    Deny from all
-</DirectoryMatch>
-
 # ===== PROTEGER ARQUIVOS SENSÍVEIS =====
 <FilesMatch "\.(json|log|env)$">
     Order allow,deny
