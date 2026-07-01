@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendar Consulta - Dra. Rayssa Silveira</title>
-    
+    <title>Agendar Consulta - Clínica OdontoKids</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
     <style>
         :root {
@@ -164,8 +165,8 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <span style="font-size: 1.5rem;">🦷</span> Dra. Rayssa Silveira
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-tooth" style="font-size: 1.5rem;"></i> Clínica OdontoKids
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -173,23 +174,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#home">Home</a>
+                        <a class="nav-link" href="../index.html#home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#servicos">Serviços</a>
+                        <a class="nav-link" href="../index.html#servicos">Serviços</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#sobre">Sobre</a>
+                        <a class="nav-link" href="../index.html#sobre">Sobre</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#contato">Contato</a>
+                        <a class="nav-link" href="../index.html#contato">Contato</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.html">Painel</a>
                     </li>
                     <li class="nav-item">
                         <button class="btn btn-outline-light btn-sm" onclick="fazerLogout()">
-                            🚪 Sair
+                            <i class="bi bi-box-arrow-right"></i> Sair
                         </button>
                     </li>
                 </ul>
@@ -200,7 +201,7 @@
     <!-- PAGE HEADER -->
     <div class="page-header">
         <div class="container">
-            <h1>🗓️ Agende Sua Consulta</h1>
+            <h1><i class="bi bi-calendar-check"></i> Agende Sua Consulta</h1>
             <p>Escolha o melhor horário para o seu filho</p>
         </div>
     </div>
@@ -230,7 +231,7 @@
                             <!-- LINHA 2: Telefone -->
                             <div class="mb-3">
                                 <label for="telefone" class="form-label">Telefone/WhatsApp *</label>
-                                <input type="tel" class="form-control" id="telefone" placeholder="(64) 99973-4194" required>
+                                <input type="tel" class="form-control" id="telefone" placeholder="(00) 00000-0000" required>
                             </div>
 
                             <!-- LINHA 3: Nome e Idade da Criança -->
@@ -250,13 +251,13 @@
                                 <label for="servico" class="form-label">Serviço Desejado *</label>
                                 <select class="form-select" id="servico" required>
                                     <option selected disabled>Selecione um serviço</option>
-                                    <option value="limpeza">🪥 Limpeza Infantil</option>
-                                    <option value="fluoretacao">🦷 Fluoretação</option>
-                                    <option value="carie">🍬 Tratamento de Cárie</option>
-                                    <option value="selante">🌟 Selante Dentário</option>
-                                    <option value="aparelho">📎 Aparelho Infantil</option>
-                                    <option value="higiene">🎉 Orientação de Higiene</option>
-                                    <option value="avaliacao">🩺 Avaliação Inicial</option>
+                                    <option value="limpeza">Limpeza Infantil</option>
+                                    <option value="fluoretacao">Fluoretação</option>
+                                    <option value="carie">Tratamento de Cárie</option>
+                                    <option value="selante">Selante Dentário</option>
+                                    <option value="aparelho">Aparelho Infantil</option>
+                                    <option value="higiene">Orientação de Higiene</option>
+                                    <option value="avaliacao">Avaliação Inicial</option>
                                 </select>
                             </div>
 
@@ -302,17 +303,17 @@
                             <!-- BOTÕES -->
                             <div class="d-grid gap-2 d-md-flex justify-content-md-between">
                                 <button type="submit" class="btn btn-custom btn-lg">
-                                    ✓ Confirmar Agendamento
+                                    <i class="bi bi-check2-circle"></i> Confirmar Agendamento
                                 </button>
                                 <button type="reset" class="btn btn-outline-secondary btn-lg">
-                                    🔄 Limpar Formulário
+                                    <i class="bi bi-arrow-clockwise"></i> Limpar Formulário
                                 </button>
                             </div>
 
                             <!-- MENSAGEM DE SUCESSO -->
                             <div id="mensagemSucesso" class="alert alert-success mt-4" role="alert" style="display: none;">
                                 <div class="d-flex align-items-center">
-                                    <div style="font-size: 2rem; margin-right: 1rem;">✓</div>
+                                    <div style="font-size: 2rem; margin-right: 1rem;"><i class="bi bi-check-circle"></i></div>
                                     <div>
                                         <strong>Sucesso!</strong> Seu agendamento foi recebido! Entraremos em contato em breve para confirmar.
                                     </div>
@@ -325,10 +326,10 @@
                 <!-- INFORMAÇÕES IMPORTANTES -->
                 <div class="card card-custom">
                     <div class="card-body p-4">
-                        <h5 style="color: var(--primary-color); font-weight: 700; margin-bottom: 1.5rem;">📌 Informações Importantes</h5>
-                        
+                        <h5 style="color: var(--primary-color); font-weight: 700; margin-bottom: 1.5rem;"><i class="bi bi-info-circle"></i> Informações Importantes</h5>
+
                         <div class="info-item">
-                            <div class="info-item-icon">⏱️</div>
+                            <div class="info-item-icon"><i class="bi bi-stopwatch"></i></div>
                             <div class="info-item-text">
                                 <h6>Duração da Consulta</h6>
                                 <p>Primeira consulta dura em média 40-50 minutos</p>
@@ -336,7 +337,7 @@
                         </div>
 
                         <div class="info-item">
-                            <div class="info-item-icon">📄</div>
+                            <div class="info-item-icon"><i class="bi bi-file-earmark-text"></i></div>
                             <div class="info-item-text">
                                 <h6>Documentos Necessários</h6>
                                 <p>Trazer documento de identidade e comprovante de endereço</p>
@@ -344,7 +345,7 @@
                         </div>
 
                         <div class="info-item">
-                            <div class="info-item-icon">🕙</div>
+                            <div class="info-item-icon"><i class="bi bi-clock-history"></i></div>
                             <div class="info-item-text">
                                 <h6>Chegada Antecipada</h6>
                                 <p>Chegar 10 minutos antes do horário agendado</p>
@@ -352,7 +353,7 @@
                         </div>
 
                         <div class="info-item">
-                            <div class="info-item-icon">👥</div>
+                            <div class="info-item-icon"><i class="bi bi-people"></i></div>
                             <div class="info-item-text">
                                 <h6>Acompanhamento</h6>
                                 <p>Responsável deve acompanhar a criança durante toda consulta</p>
@@ -360,10 +361,10 @@
                         </div>
 
                         <div class="info-item">
-                            <div class="info-item-icon">📱</div>
+                            <div class="info-item-icon"><i class="bi bi-telephone"></i></div>
                             <div class="info-item-text">
                                 <h6>Dúvidas?</h6>
-                                <p>Entre em contato: <strong>(64) 99973-4194</strong></p>
+                                <p>Entre em contato: <strong>(00) 00000-0000</strong></p>
                             </div>
                         </div>
                     </div>
@@ -371,7 +372,7 @@
 
                 <!-- VOLTAR -->
                 <div class="text-center mt-4">
-                    <a href="index.html" class="voltar-link">← Voltar para Home</a>
+                    <a href="../index.html" class="voltar-link">← Voltar para Home</a>
                 </div>
             </div>
         </div>
@@ -380,8 +381,8 @@
     <!-- FOOTER -->
     <footer class="footer-custom">
         <div class="container">
-            <p class="mb-2"><strong>&copy; 2025 Dra. Rayssa Silveira da Silva - Odontopediatria. Todos os direitos reservados.</strong></p>
-            <p>CRO-SP: 12345 | Especialista em Saúde Bucal Infantil | Desde 2024 | ❤️</p>
+            <p class="mb-2"><strong>&copy; 2025 Clínica OdontoKids - Odontopediatria. Todos os direitos reservados.</strong></p>
+            <p>CRO: 00000 | Especialista em Saúde Bucal Infantil</p>
         </div>
     </footer>
 
@@ -405,7 +406,7 @@
         // ===== VERIFICAR AUTENTICAÇÃO AO CARREGAR A PÁGINA =====
         async function verificarAutenticacao() {
             try {
-                const response = await fetch('verificar_autenticacao.php');
+                const response = await fetch('../api/verificar_autenticacao.php');
                 const data = await response.json();
                 
                 if (!data.autenticado) {
@@ -454,16 +455,16 @@
             const modalHTML = `
                 <div class="alert alert-warning mt-5" role="alert" style="max-width: 500px; margin: 50px auto;">
                     <div class="d-flex align-items-center">
-                        <div style="font-size: 3rem; margin-right: 1rem;">🔐</div>
+                        <div style="font-size: 3rem; margin-right: 1rem;"><i class="bi bi-shield-lock"></i></div>
                         <div>
                             <h4 class="alert-heading">Acesso Restrito</h4>
                             <p class="mb-3">Para agendar uma consulta, você precisa estar logado em sua conta.</p>
                             <p class="mb-3">Não tem conta? Crie uma agora!</p>
                             <div class="d-grid gap-2">
                                 <a href="auth.html?referrer=agendamentos" class="btn btn-custom btn-lg">
-                                    🔓 Login / Cadastro
+                                    <i class="bi bi-box-arrow-in-right"></i> Login / Cadastro
                                 </a>
-                                <a href="index.html" class="btn btn-outline-secondary btn-lg">
+                                <a href="../index.html" class="btn btn-outline-secondary btn-lg">
                                     ← Voltar para Home
                                 </a>
                             </div>
@@ -505,7 +506,7 @@
             const btnSubmit = document.querySelector('button[type="submit"]');
             const btnText = btnSubmit.innerHTML;
             btnSubmit.disabled = true;
-            btnSubmit.innerHTML = '⏳ Enviando...';
+            btnSubmit.innerHTML = 'Enviando...';
 
             // Coletar dados
             const dados = {
@@ -539,7 +540,7 @@
             }
 
             // Enviar para servidor
-            fetch('processar_agendamento.php', {
+            fetch('../api/processar_agendamento.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -593,7 +594,7 @@
             // Atualizar conteúdo
             divMensagem.innerHTML = `
                 <div class="d-flex align-items-center">
-                    <div style="font-size: 2rem; margin-right: 1rem;">✓</div>
+                    <div style="font-size: 2rem; margin-right: 1rem;"><i class="bi bi-check-circle"></i></div>
                     <div>
                         <strong>${mensagem}</strong><br>
                         <small>Consulta: <strong>${confirmacao.crianca}</strong> - ${confirmacao.data} às ${confirmacao.hora}</small>
@@ -618,7 +619,7 @@
             // Atualizar conteúdo e classe
             divMensagem.innerHTML = `
                 <div class="d-flex align-items-center">
-                    <div style="font-size: 2rem; margin-right: 1rem; color: #dc3545;">⚠️</div>
+                    <div style="font-size: 2rem; margin-right: 1rem; color: #dc3545;"><i class="bi bi-exclamation-triangle"></i></div>
                     <div>
                         <strong>Erro!</strong><br>
                         <small>${mensagem}</small>
@@ -640,12 +641,12 @@
         // ===== FAZER LOGOUT =====
         function fazerLogout() {
             if (confirm('Tem certeza que deseja sair?')) {
-                fetch('processar_auth.php', {
+                fetch('../api/processar_auth.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ acao: 'logout' })
                 }).then(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = '../index.html';
                 });
             }
         }

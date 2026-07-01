@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Dra. Rayssa Silveira</title>
+    <title>Admin Dashboard - Clínica OdontoKids</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <style>
         :root {
@@ -156,8 +157,8 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">
-                <span style="font-size: 1.5rem;">🦷</span> Admin - Dra. Rayssa Silveira
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="bi bi-tooth" style="font-size: 1.5rem;"></i> Admin - Clínica OdontoKids
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -168,7 +169,7 @@
                         <a class="nav-link" href="admin_dashboard.html">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Site</a>
+                        <a class="nav-link" href="../index.html">Site</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="logoutBtn" href="#">Sair</a>
@@ -181,7 +182,7 @@
     <!-- DASHBOARD HEADER -->
     <div class="dashboard-header">
         <div class="container">
-            <h1>🛠️ Painel Administrativo</h1>
+            <h1><i class="bi bi-tools"></i> Painel Administrativo</h1>
             <p>Gerencie todos os agendamentos da clínica</p>
         </div>
     </div>
@@ -218,7 +219,7 @@
 
         <!-- FILTERS -->
         <div class="filter-section">
-            <h5>🔍 Filtros</h5>
+            <h5><i class="bi bi-funnel"></i> Filtros</h5>
             <div class="row">
                 <div class="col-md-3">
                     <label for="filtroData" class="form-label">Data</label>
@@ -249,7 +250,7 @@
         <!-- AGENDAMENTOS TABLE -->
         <div class="card card-custom">
             <div class="card-header">
-                <h5 class="mb-0">📅 Todos os Agendamentos</h5>
+                <h5 class="mb-0"><i class="bi bi-calendar-check"></i> Todos os Agendamentos</h5>
             </div>
             <div class="card-body">
                 <div id="loading" class="loading">
@@ -319,7 +320,7 @@
         // Verificar autenticação e se é admin
         async function verificarAdmin() {
             try {
-                const response = await fetch('verificar_autenticacao.php');
+                const response = await fetch('../api/verificar_autenticacao.php');
                 const data = await response.json();
 
                 if (!data.autenticado) {
@@ -329,7 +330,7 @@
 
                 if (!data.is_admin) {
                     alert('Acesso negado. Apenas administradores podem acessar esta página.');
-                    window.location.href = 'index.html';
+                    window.location.href = '../index.html';
                     return false;
                 }
 
@@ -348,7 +349,7 @@
                 document.getElementById('tableContainer').style.display = 'none';
                 document.getElementById('errorContainer').style.display = 'none';
 
-                const response = await fetch('admin_agendamentos.php');
+                const response = await fetch('../api/admin_agendamentos.php');
                 const data = await response.json();
 
                 console.log('Dados recebidos do servidor:', data);
@@ -457,13 +458,13 @@
                         </td>
                         <td>
                             <button class="btn btn-sm btn-outline-primary me-1" onclick="verDetalhes('${idAgendamento}')">
-                                👁️ Ver
+                                <i class="bi bi-eye"></i> Ver
                             </button>
                             <button class="btn btn-sm btn-success me-1" onclick="alterarStatus('${idAgendamento}', 'confirmado')" ${status === 'confirmado' ? 'disabled' : ''}>
-                                ✓ Confirmar
+                                <i class="bi bi-check2"></i> Confirmar
                             </button>
                             <button class="btn btn-sm btn-danger" onclick="alterarStatus('${idAgendamento}', 'cancelado')" ${status === 'cancelado' ? 'disabled' : ''}>
-                                ✗ Cancelar
+                                <i class="bi bi-x-lg"></i> Cancelar
                             </button>
                         </td>
                     `;
@@ -505,27 +506,27 @@
             content.innerHTML = `
                 <div class="row">
                     <div class="col-md-6">
-                        <h6>📅 Data e Hora</h6>
+                        <h6><i class="bi bi-calendar-event"></i> Data e Hora</h6>
                         <p>${formatarData(agendamento.dataAgendada)} às ${agendamento.horaAgendada}</p>
 
-                        <h6>👶 Dados da Criança</h6>
+                        <h6><i class="bi bi-person"></i> Dados da Criança</h6>
                         <p><strong>Nome:</strong> ${agendamento.nomeCrianca}</p>
                         <p><strong>Idade:</strong> ${agendamento.idade} anos</p>
 
-                        <h6>🦷 Serviço</h6>
+                        <h6><i class="bi bi-tooth"></i> Serviço</h6>
                         <p>${agendamento.servico.charAt(0).toUpperCase() + agendamento.servico.slice(1)}</p>
                     </div>
                     <div class="col-md-6">
-                        <h6>👨‍👩‍👧 Responsável</h6>
+                        <h6><i class="bi bi-people"></i> Responsável</h6>
                         <p><strong>Nome:</strong> ${agendamento.nome}</p>
                         <p><strong>Email:</strong> ${agendamento.email}</p>
                         <p><strong>Telefone:</strong> ${agendamento.telefone}</p>
 
-                        <h6>📝 Status</h6>
+                        <h6><i class="bi bi-info-circle"></i> Status</h6>
                         <p><span class="status-badge status-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></p>
 
                         ${agendamento.observacoes ? `
-                        <h6>💬 Observações</h6>
+                        <h6><i class="bi bi-chat-left-text"></i> Observações</h6>
                         <p>${agendamento.observacoes}</p>
                         ` : ''}
                     </div>
@@ -546,7 +547,7 @@
             }
 
             try {
-                const response = await fetch('alterar_status_agendamento.php', {
+                const response = await fetch('../api/alterar_status_agendamento.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -615,12 +616,12 @@
         document.getElementById('logoutBtn').addEventListener('click', function(e) {
             e.preventDefault();
             if (confirm('Tem certeza que deseja sair?')) {
-                fetch('processar_auth.php', {
+                fetch('../api/processar_auth.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ acao: 'logout' })
                 }).then(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = '../index.html';
                 });
             }
         });

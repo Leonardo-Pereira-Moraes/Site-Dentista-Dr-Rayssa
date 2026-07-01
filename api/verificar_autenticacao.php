@@ -11,7 +11,7 @@ session_start();
 // Verificar se usuário está autenticado
 if (!empty($_SESSION['usuario_id'])) {
     // Incluir conexão com banco
-    require_once 'db.php';
+    require_once '../config/db.php';
 
     // Obter dados do usuário incluindo is_admin
     try {

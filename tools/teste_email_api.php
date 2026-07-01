@@ -3,11 +3,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', dirname(__FILE__) . '/logs/email_teste.log');
+ini_set('error_log', dirname(__FILE__, 2) . '/logs/email_teste.log');
 
 header('Content-Type: application/json; charset=utf-8');
 
-require_once 'envio_email.php';
+require_once '../config/envio_email.php';
 
 function enviarErro($mensagem, $detalhes = null) {
     echo json_encode([
@@ -61,7 +61,7 @@ try {
         );
     }
 
-    error_log("[TESTE EMAIL] ✅ Email enviado com sucesso para {$email}");
+    error_log("[TESTE EMAIL] Email enviado com sucesso para {$email}");
 
     http_response_code(200);
     echo json_encode([
@@ -71,7 +71,7 @@ try {
     ]);
 
 } catch (Exception $e) {
-    error_log("[TESTE EMAIL] ❌ Erro: " . $e->getMessage());
+    error_log("[TESTE EMAIL] Erro: " . $e->getMessage());
     
     http_response_code(500);
     enviarErro(

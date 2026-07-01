@@ -2,7 +2,7 @@
 -- Substitua 'EMAIL_DO_ADMIN' pelo email do usuário que deve ser admin
 
 -- ADMIN PRINCIPAL DO SISTEMA:
--- UPDATE usuarios SET is_admin = TRUE WHERE email = 'rayssasilveira764@gmail.com';
+-- UPDATE usuarios SET is_admin = TRUE WHERE email = 'admin@clinicaodontokids.com.br';
 
 -- Para listar todos os usuários:
 -- SELECT id, nome, email, is_admin FROM usuarios;

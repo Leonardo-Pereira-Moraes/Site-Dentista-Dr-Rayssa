@@ -47,7 +47,7 @@
    ├─ Compressão GZIP
    └─ Regras de rewrite (preparado para HTTPS)
 
-5. 📚 Documentos de Suporte:
+5. Documentos de Suporte:
    ├─ SEGURANÇA.md (250+ linhas) - Documentação detalhada
    ├─ FAQ.md (150+ linhas) - Perguntas frequentes + troubleshooting
    ├─ ARQUITETURA.md (300+ linhas) - Diagramas de fluxo
@@ -57,11 +57,11 @@
 
 ARQUIVOS MODIFICADOS (2):
 
-1. ↔ index.html
-   ├─ + Link "🔓 Login" na navbar (antes de "Agendar Consulta")
+1. [MODIFICADO] index.html
+   ├─ + Link "Entrar" na navbar (antes de "Agendar Consulta")
    └─ Botão com estilo transparente para contrastar com o branding
 
-2. ↔ README.md
+2. [MODIFICADO] README.md
    ├─ + Seção de Autenticação (novo sistema)
    ├─ + Atualizado estrutura de arquivos
    ├─ + Fluxo de autenticação
@@ -72,33 +72,33 @@ ARQUIVOS MODIFICADOS (2):
 
  SEGURANÇA IMPLEMENTADA:
 
-✅ AUTENTICAÇÃO:
+AUTENTICAÇÃO:
    ├─ Hash Bcrypt para senhas (impossível recuperar)
    ├─ password_verify() com proteção contra timing attacks
    ├─ Delay aleatório de 0.5-1.5s em falhas (anti-brute force)
    ├─ Sessões seguras com $_SESSION
    └─ Cookies HttpOnly + Secure + SameSite=Strict
 
-✅ VALIDAÇÃO:
+VALIDAÇÃO:
    ├─ Email: FILTER_VALIDATE_EMAIL
    ├─ Telefone: regex para 10+ dígitos
    ├─ Nome: regex para letras/acentos/espaços
    ├─ Senha: mínimo 6 caracteres, máximo 128
    └─ Comprimento: range checks em todos campos
 
-✅ SANITIZAÇÃO:
+SANITIZAÇÃO:
    ├─ htmlspecialchars() com ENT_QUOTES
    ├─ Proteção contra XSS
    ├─ Suporte UTF-8 completo
    └─ Email normalizado com strtolower()
 
-✅ RATE LIMITING:
+RATE LIMITING:
    ├─ 10 requisições por minuto por IP
    ├─ HTTP 429 (Too Many Requests)
    ├─ Auto-reset após timeout
    └─ Cache em /cache/rate_limit_*.txt
 
-✅ HEADERS DE SEGURANÇA:
+HEADERS DE SEGURANÇA:
    ├─ X-Content-Type-Options: nosniff
    ├─ X-Frame-Options: DENY
    ├─ X-XSS-Protection: 1; mode=block
@@ -106,13 +106,13 @@ ARQUIVOS MODIFICADOS (2):
    ├─ Referrer-Policy: strict-origin-when-cross-origin
    └─ Content-Security-Policy: default-src 'self'
 
-✅ LOGGING:
+LOGGING:
    ├─ /logs/auth.log - Eventos de autenticação
    ├─ /logs/agendamentos.log - Eventos de agendamento
    ├─ /logs/php_errors.log - Erros do servidor
    └─ Cada evento com timestamp + IP
 
-✅ PROTEÇÃO DE ARQUIVO:
+PROTEÇÃO DE ARQUIVO:
    ├─ /dados_auth/usuarios.json - chmod 0600 (owner only)
    ├─ .htaccess - Rejeita acesso direto
    ├─ File locking - Evita corrupção
@@ -120,48 +120,48 @@ ARQUIVOS MODIFICADOS (2):
 
 ═════════════════════════════════════════════════════════════════
 
-📂 ESTRUTURA DE DIRETÓRIOS:
+ESTRUTURA DE DIRETÓRIOS:
 
 Prototipo-PHP/
 ├── index.html (modificado)
-├── auth.html ......................... ✨ NOVO
+├── auth.html ......................... NOVO
 ├── agendamentos.html
-├── dashboard.html .................... ✨ NOVO
+├── dashboard.html .................... NOVO
 ├── processar_agendamento.php
-├── processar_auth.php ................ ✨ NOVO
-├── .htaccess ......................... ✨ NOVO
+├── processar_auth.php ................ NOVO
+├── .htaccess ......................... NOVO
 │
-├── 📚 Documentação
+├── Documentação
 │   ├── README.md (atualizado)
-│   ├── SEGURANÇA.md .................. ✨ NOVO
-│   ├── FAQ.md ........................ ✨ NOVO
-│   ├── ARQUITETURA.md ............... ✨ NOVO
-│   └── INSTALAÇÃO.txt ............... ✨ NOVO
+│   ├── SEGURANÇA.md .................. NOVO
+│   ├── FAQ.md ........................ NOVO
+│   ├── ARQUITETURA.md ............... NOVO
+│   └── INSTALAÇÃO.txt ............... NOVO
 │
-├── 🔐 Dados Seguros (criado automaticamente)
+├── Dados Seguros (criado automaticamente)
 │   ├── /logs/
 │   │   ├── agendamentos.log
-│   │   ├── auth.log ................. ✨ NOVO
+│   │   ├── auth.log ................. NOVO
 │   │   └── php_errors.log
 │   ├── /cache/
 │   │   └── rate_limit_*.txt
 │   ├── /dados/
 │   │   └── agendamentos_*.json
-│   └── /dados_auth/ ................. ✨ NOVO
+│   └── /dados_auth/ ................. NOVO
 │       └── usuarios.json (chmod 0600)
 │
 └── css/, img/ (sem alterações)
 
 ═════════════════════════════════════════════════════════════════
 
-🎮 COMO TESTAR:
+COMO TESTAR:
 
 1. Deploy dos arquivos em servidor PHP
    $ cp -r Prototipo-PHP /var/www/html/
 
 2. Acesse: http://localhost/Prototipo-PHP/index.html
 
-3. Clique em "🔓 Login"
+3. Clique em "Entrar"
 
 4. Teste com usuário demo:
    Email: demo@test.com
@@ -175,50 +175,50 @@ Prototipo-PHP/
 
 ═════════════════════════════════════════════════════════════════
 
-✨ DESTAQUE TÉCNICO:
+DESTAQUE TÉCNICO:
 
-⭐ Bcrypt Hashing
+Bcrypt Hashing
    └─ Senhas com salt aleatório, proteção contra força bruta
 
-⭐ Timing Attack Protection
+Timing Attack Protection
    └─ Delay aleatório de 0.5-1.5s em tentativas falhadas
 
-⭐ Rate Limiting Inteligente
+Rate Limiting Inteligente
    └─ 10 requisições/minuto por IP com reset automático
 
-⭐ Multi-Camadas de Validação
+Multi-Camadas de Validação
    └─ Cliente (UX) + Servidor (Segurança)
 
-⭐ Logging Completo
+Logging Completo
    └─ Auditoria de todas ações com IP e timestamp
 
-⭐ Cookies Seguros
+Cookies Seguros
    └─ HttpOnly (JS não pode acessar)
    └─ Secure (HTTPS only em produção)
    └─ SameSite=Strict (CSRF protection)
 
-⭐ Estrutura Extensível
+Estrutura Extensível
    └─ Fácil migração para MySQL/SQLite
    └─ Preparado para 2FA e OAuth
 
 ═════════════════════════════════════════════════════════════════
 
-📊 MÉTRICAS:
+MÉTRICAS:
 
-📝 Linhas de código:
+Linhas de código:
    ├─ auth.html: 450+ linhas (HTML + CSS inline)
    ├─ processar_auth.php: 300+ linhas (PHP seguro)
    ├─ dashboard.html: 300+ linhas (HTML + CSS + JS)
    └─ TOTAL NOVO: 1000+ linhas de código production-ready
 
-🔒 Proteções implementadas: 20+
-⚡ Performance: Otimizado (< 200ms por requisição)
-🎨 Design: Responsivo (mobile-first)
-📱 Compatibilidade: Todos navegadores modernos
+Proteções implementadas: 20+
+Performance: Otimizado (< 200ms por requisição)
+Design: Responsivo (mobile-first)
+Compatibilidade: Todos navegadores modernos
 
 ═════════════════════════════════════════════════════════════════
 
-🚀 PRÓXIMOS PASSOS (ROADMAP):
+PRÓXIMOS PASSOS (ROADMAP):
 
 □ Fase 2 - Banco de Dados
   ├─ Migrar de JSON para SQLite/MySQL
@@ -246,19 +246,19 @@ Prototipo-PHP/
 
 ═════════════════════════════════════════════════════════════════
 
-✅ CHECKLIST DE CONCLUSÃO:
+CHECKLIST DE CONCLUSÃO:
 
-✓ Sistema de login funcionando
-✓ Sistema de cadastro funcionando
-✓ Hash Bcrypt implementado
-✓ Rate limiting ativo
-✓ Logging de eventos
-✓ Documentação completa
-✓ FAQs responden duvidas
-✓ Arquitetura documentada
-✓ Pronto para produção com HTTPS
-✓ Usuário demo pré-criado
-✓ Tudo seguro contra:
+- Sistema de login funcionando
+- Sistema de cadastro funcionando
+- Hash Bcrypt implementado
+- Rate limiting ativo
+- Logging de eventos
+- Documentação completa
+- FAQs responden duvidas
+- Arquitetura documentada
+- Pronto para produção com HTTPS
+- Usuário demo pré-criado
+- Tudo seguro contra:
   ├─ Força bruta
   ├─ XSS
   ├─ Timing attacks
@@ -269,15 +269,15 @@ Prototipo-PHP/
 
 ═════════════════════════════════════════════════════════════════
 
-🎉 PARABÉNS!
+PARABÉNS!
 
 Seu sistema de agendamento agora tem:
-✨ Autenticação segura
-✨ Login e Cadastro
-✨ Dashboard personalizado
-✨ Proteção em múltiplas camadas
-✨ Documentação profissional
-✨ Pronto para produção
+- Autenticação segura
+- Login e Cadastro
+- Dashboard personalizado
+- Proteção em múltiplas camadas
+- Documentação profissional
+- Pronto para produção
 
 Qualquer dúvida, consulte:
 - README.md (visão geral)
@@ -288,5 +288,5 @@ Qualquer dúvida, consulte:
 ═════════════════════════════════════════════════════════════════
 Versão: 1.1 (com Sistema de Autenticação)
 Data: Março 2026
-Status: ✅ PRODUCTION READY
+Status: PRODUCTION READY
 ═════════════════════════════════════════════════════════════════

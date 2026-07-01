@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dra. Rayssa Silveira - Odontopediatria</title>
-    
+    <title>Clínica Odontopediátrica - Saúde Bucal Infantil</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
     <style>
         :root {
@@ -196,7 +197,7 @@ background: white;
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="#home">
-                <span style="font-size: 1.5rem;">🦷</span> Dra. Rayssa Silveira
+                <i class="bi bi-tooth" style="font-size: 1.5rem;"></i> Clínica OdontoKids
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -216,8 +217,8 @@ background: white;
                         <a class="nav-link" href="index.html#contato">Contato</a>
                     </li>
                 </ul>
-                <a href="auth.html" class="btn btn-custom ms-2" style="background: transparent; border: 2px solid white;">🔓 Login</a>
-                <a href="agendamentos.html" class="btn btn-custom ms-2">Agendar Consulta</a>
+                <a href="pages/auth.html" class="btn btn-custom ms-2" style="background: transparent; border: 2px solid white;">Entrar</a>
+                <a href="pages/agendamentos.html" class="btn btn-custom ms-2">Agendar Consulta</a>
             </div>
         </div>
     </nav>
@@ -225,9 +226,9 @@ background: white;
     <!-- HERO SECTION -->
     <section id="home" class="hero-custom">
         <div class="container">
-            <h2>Bem-vindo ao Mundo Mágico da Odontopediatria!</h2>
-            <p class="lead mb-4">Cuidado dentário infantil de qualidade com amor, paciência e divertimento</p>
-            <a href="agendamentos.html" class="btn btn-custom btn-lg">Agendar Agora</a>
+            <h2>Cuidado Dentário Infantil com Qualidade e Carinho</h2>
+            <p class="lead mb-4">Atendimento especializado para crianças em um ambiente acolhedor e seguro</p>
+            <a href="pages/agendamentos.html" class="btn btn-custom btn-lg">Agendar Agora</a>
         </div>
     </section>
 
@@ -239,7 +240,7 @@ background: white;
                 <div class="col-md-6 col-lg-4">
                     <div class="card card-custom h-100">
                         <div class="card-body text-center">
-                            <div class="card-icon">🪥</div>
+                            <div class="card-icon"><i class="bi bi-droplet-half"></i></div>
                             <h5 class="card-title text-dark">Limpeza Infantil</h5>
                             <p class="card-text text-muted">Limpeza gentil e divertida para dentes de leite e permanentes</p>
                         </div>
@@ -249,7 +250,7 @@ background: white;
                 <div class="col-md-6 col-lg-4">
                     <div class="card card-custom h-100">
                         <div class="card-body text-center">
-                            <div class="card-icon">🦷</div>
+                            <div class="card-icon"><i class="bi bi-tooth"></i></div>
                             <h5 class="card-title text-dark">Fluoretação</h5>
                             <p class="card-text text-muted">Proteção extra para prevenir cáries e fortalecer os dentes</p>
                         </div>
@@ -259,7 +260,7 @@ background: white;
                 <div class="col-md-6 col-lg-4">
                     <div class="card card-custom h-100">
                         <div class="card-body text-center">
-                            <div class="card-icon">🍬</div>
+                            <div class="card-icon"><i class="bi bi-shield-check"></i></div>
                             <h5 class="card-title text-dark">Tratamento de Cárie</h5>
                             <p class="card-text text-muted">Tratamento seguro e indolor de cáries em crianças</p>
                         </div>
@@ -269,7 +270,7 @@ background: white;
                 <div class="col-md-6 col-lg-4">
                     <div class="card card-custom h-100">
                         <div class="card-body text-center">
-                            <div class="card-icon">🌟</div>
+                            <div class="card-icon"><i class="bi bi-star-fill"></i></div>
                             <h5 class="card-title text-dark">Selante Dentário</h5>
                             <p class="card-text text-muted">Proteção para molares contra cáries e acidez</p>
                         </div>
@@ -279,7 +280,7 @@ background: white;
                 <div class="col-md-6 col-lg-4">
                     <div class="card card-custom h-100">
                         <div class="card-body text-center">
-                            <div class="card-icon">📎</div>
+                            <div class="card-icon"><i class="bi bi-braces"></i></div>
                             <h5 class="card-title text-dark">Aparelho Infantil</h5>
                             <p class="card-text text-muted">Ortodontia lúdica para alinhar dentes em crescimento</p>
                         </div>
@@ -289,7 +290,7 @@ background: white;
                 <div class="col-md-6 col-lg-4">
                     <div class="card card-custom h-100">
                         <div class="card-body text-center">
-                            <div class="card-icon">🎉</div>
+                            <div class="card-icon"><i class="bi bi-emoji-smile"></i></div>
                             <h5 class="card-title text-dark">Orientação de Higiene</h5>
                             <p class="card-text text-muted">Ensinamos as crianças a amar a escovação dental</p>
                         </div>
@@ -302,16 +303,16 @@ background: white;
     <!-- SOBRE -->
     <section id="sobre" class="py-5 bg-white">
         <div class="container">
-            <h2 class="section-title">Sobre a Dra. Rayssa</h2>
+            <h2 class="section-title">Sobre a Dra. Ana Souza</h2>
             <div class="row align-items-center">
                 <div class="col-lg-5 mb-4 mb-lg-0">
-                    <img src="img/d77eddc9-4e58-4bda-bb10-98b4d2008d4f.jpg" alt="Dra. Rayssa Silveira da Silva" class="img-fluid rounded-4 shadow" style="max-width: 100%; height: auto;">
+                    <div style="width:100%;height:320px;background:#E6D9F5;border-radius:16px;display:flex;align-items:center;justify-content:center;"><i class="bi bi-person-circle" style="font-size:6rem;color:#B78FD6;"></i></div>
                 </div>
                 <div class="col-lg-7">
-                    <h3 style="color: var(--primary-color); font-weight: 700;">Dra. Rayssa Silveira da Silva</h3>
-                    <p class="lead mt-3"><strong>CRO-SP: 12345 | Especialista em Odontopediatria</strong></p>
-                    <p>A Dra. Rayssa Silveira da Silva é uma jovem profissional apaixonada por trabalhar com crianças. Recém-formada há 1 ano, ela já se dedica exclusivamente à odontopediatria, oferecendo atendimento especializado com muito amor, paciência e criatividade.</p>
-                    <p>Com formação atualizadássima nas melhores técnicas de atendimento infantil, ela cria um ambiente acolhedor e divertido onde as crianças adoram ir ao dentista. Aqui, cada consulta é uma aventura segura e feliz!</p>
+                    <h3 style="color: var(--primary-color); font-weight: 700;">Dra. Ana Souza</h3>
+                    <p class="lead mt-3"><strong>CRO: 00000 | Especialista em Odontopediatria</strong></p>
+                    <p>Profissional dedicada ao atendimento infantil, com formação especializada em odontopediatria. Atua com técnicas modernas e humanizadas, criando um ambiente onde as crianças se sentem seguras e acolhidas.</p>
+                    <p>Com abordagem lúdica e personalizada, transforma cada consulta em uma experiência positiva, incentivando hábitos saudáveis desde a infância.</p>
                 </div>
             </div>
             <div class="row align-items-center mt-5">
@@ -348,29 +349,29 @@ background: white;
             <div class="row g-4">
                 <div class="col-md-6 col-lg-3">
                     <div class="info-box">
-                        <h3>📍 Localização</h3>
-                        <p>Rua Martiniano da Silva, 549<br>Centro - Rio Verde, GO<br>CEP: 75935-000</p>
+                        <h3><i class="bi bi-geo-alt"></i> Localização</h3>
+                        <p>Rua Exemplo, 100<br>Centro - Sua Cidade, UF<br>CEP: 00000-000</p>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-3">
                     <div class="info-box">
-                        <h3>📞 Telefone</h3>
-                        <p><br><strong>WhatsApp:</strong> (64) 99973-4194</p>
+                        <h3><i class="bi bi-telephone"></i> Telefone</h3>
+                        <p><br><strong>WhatsApp:</strong> (00) 00000-0000</p>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-3">
                     <div class="info-box">
-                        <h3>🕐 Horário</h3>
+                        <h3><i class="bi bi-clock"></i> Horário</h3>
                         <p>Seg-Qua: 10:00 - 17:30<br>Sexta: 10:00 - 15:00<br>Sábado: 09:00 - 12:00</p>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-3">
                     <div class="info-box">
-                        <h3>✉️ Email</h3>
-                        <p>Silveirarayssa764@gmail.com<br></p>
+                        <h3><i class="bi bi-envelope"></i> Email</h3>
+                        <p>contato@clinicaodontokids.com.br<br></p>
                     </div>
                 </div>
             </div>
@@ -380,8 +381,8 @@ background: white;
     <!-- FOOTER -->
     <footer class="footer-custom text-center">
         <div class="container">
-            <p class="mb-2"><strong>&copy; 2025 Dra. Rayssa Silveira da Silva - Odontopediatria. Todos os direitos reservados.</strong></p>
-            <p>CRO-SP: 12345 | Especialista em Saúde Bucal Infantil | Desde 2024 | ❤️</p>
+            <p class="mb-2"><strong>&copy; 2025 Clínica OdontoKids - Odontopediatria. Todos os direitos reservados.</strong></p>
+            <p>CRO: 00000 | Especialista em Saúde Bucal Infantil</p>
         </div>
     </footer>
 

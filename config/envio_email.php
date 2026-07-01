@@ -1,8 +1,8 @@
 <?php
 
 class EnvioEmail {
-    private $endereco_admin = 'rayssasilveira764@gmail.com';
-    private $nome_clinica = 'Dra. Rayssa Silveira';
+    private $endereco_admin = 'contato@clinicaodontokids.com.br';
+    private $nome_clinica = 'Clínica OdontoKids';
     private $usar_sendmail = true;
 
     public static function gerarCodigo2FA() {
@@ -27,7 +27,7 @@ class EnvioEmail {
                 return false;
             }
 
-            error_log("[EnvioEmail] ✅ Código 2FA enviado com sucesso para {$email}");
+            error_log("[EnvioEmail] Código 2FA enviado com sucesso para {$email}");
             return true;
         } catch (Exception $e) {
             error_log("[EnvioEmail] Exceção: " . $e->getMessage());
@@ -48,7 +48,7 @@ class EnvioEmail {
                 return false;
             }
 
-            error_log("[EnvioEmail] ✅ Confirmação enviada com sucesso para {$email}");
+            error_log("[EnvioEmail] Confirmação enviada com sucesso para {$email}");
             return true;
         } catch (Exception $e) {
             error_log("[EnvioEmail] Exceção: " . $e->getMessage());
@@ -88,7 +88,7 @@ class EnvioEmail {
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔐 Autenticação em Duas Etapas</h1>
+            <h1>Autenticação em Duas Etapas</h1>
         </div>
         <div class="content">
             <p>Olá <strong>{$nome}</strong>,</p>
@@ -97,7 +97,7 @@ class EnvioEmail {
                 <p class="codigo">{$codigo}</p>
             </div>
             <p><strong>Este código expira em 10 minutos.</strong></p>
-            <div class="aviso">⚠️ Nunca compartilhe este código com ninguém.</div>
+            <div class="aviso">Atenção: nunca compartilhe este código com ninguém.</div>
             <p>Atenciosamente,<br><strong>{$this->nome_clinica}</strong></p>
         </div>
         <div class="footer">
@@ -128,7 +128,7 @@ HTML;
 <body>
     <div class="container">
         <div class="header">
-            <h1>✅ Login Confirmado</h1>
+            <h1>Login Confirmado</h1>
         </div>
         <div class="content">
             <p>Olá <strong>{$nome}</strong>,</p>
@@ -150,7 +150,7 @@ HTML;
 </head>
 <body>
     <div class="container">
-        <div class="header"><h1>✅ Login Confirmado</h1></div>
+        <div class="header"><h1>Login Confirmado</h1></div>
         <div class="content">
             <p>Olá <strong>{$nome}</strong>,</p>
             <p>Seu login foi confirmado com sucesso.</p>

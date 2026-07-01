@@ -10,7 +10,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 // ===== INCLUIR CONEXÃO COM BANCO =====
-require_once 'db.php';
+require_once '../config/db.php';
 
 // Verificar se o usuário é admin
 try {

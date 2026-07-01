@@ -6,11 +6,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // Não expor erros
 ini_set('log_errors', 1);
-ini_set('error_log', dirname(__FILE__) . '/logs/php_errors.log');
+ini_set('error_log', dirname(__FILE__, 2) . '/logs/php_errors.log');
 
 // Criar diretório de logs se não existir
-if (!is_dir(dirname(__FILE__) . '/logs')) {
-    mkdir(dirname(__FILE__) . '/logs', 0755, true);
+if (!is_dir(dirname(__FILE__, 2) . '/logs')) {
+    mkdir(dirname(__FILE__, 2) . '/logs', 0755, true);
 }
 
 // ===== HEADERS DE SEGURANÇA =====
@@ -26,7 +26,7 @@ header('Content-Security-Policy: default-src \'self\'; script-src \'self\'');
 session_start();
 
 // ===== INCLUIR CONEXÃO COM BANCO =====
-require_once 'db.php';
+require_once '../config/db.php';
 
 // ===== VERIFICAR AUTENTICAÇÃO =====
 if (empty($_SESSION['usuario_id'])) {
@@ -41,7 +41,7 @@ function log_evento($tipo, $mensagem, $ip = '') {
     if (!$ip) $ip = $_SERVER['REMOTE_ADDR'] ?? 'DESCONHECIDO';
     $timestamp = date('Y-m-d H:i:s');
     $log_message = "[{$timestamp}] [{$tipo}] IP: {$ip} | {$mensagem}\n";
-    error_log($log_message, 3, dirname(__FILE__) . '/logs/agendamentos.log');
+    error_log($log_message, 3, dirname(__FILE__, 2) . '/logs/agendamentos.log');
 }
 
 // ===== VERIFICAR HTTPS EM PRODUÇÃO =====
@@ -58,7 +58,7 @@ if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
 $ip = $_SERVER['REMOTE_ADDR'];
 
 // ===== RATE LIMITING =====
-$cache_dir = dirname(__FILE__) . '/cache';
+$cache_dir = dirname(__FILE__, 2) . '/cache';
 if (!is_dir($cache_dir)) {
     mkdir($cache_dir, 0755, true);
 }
@@ -285,8 +285,8 @@ echo json_encode($resposta, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_H
 // ===== OPCIONAL: ENVIAR EMAIL DE CONFIRMAÇÃO =====
 /*
 $para = $email;
-$assunto = 'Confirmação de Agendamento - Dra. Rayssa Silveira';
-$headers = "From: noreply@drrayssa.com\r\n";
+$assunto = 'Confirmação de Agendamento - Clínica OdontoKids';
+$headers = "From: noreply@clinicaodontokids.com.br\r\n";
 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 $headers .= "X-Mailer: PHP/" . phpversion();
 
@@ -305,7 +305,7 @@ $corpo_email = "
             <li><strong>Hora:</strong> " . $hora . "</li>
         </ul>
         <p>Até logo!</p>
-        <p><strong>Dra. Rayssa Silveira</strong></p>
+        <p><strong>Clínica OdontoKids</strong></p>
     </body>
 </html>
 ";

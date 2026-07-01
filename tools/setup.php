@@ -11,7 +11,7 @@ try {
     $pdo->exec("USE prototipo_php");
 
     // Ler o arquivo schema.sql
-    $sql = file_get_contents('schema.sql');
+    $sql = file_get_contents(__DIR__ . '/../sql/schema.sql');
 
     // Remover a linha CREATE DATABASE
     $sql = preg_replace('/CREATE DATABASE.*;\s*/i', '', $sql);

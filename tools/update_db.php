@@ -1,7 +1,7 @@
 <?php
 // Script para atualizar o banco de dados - adicionar coluna is_admin
 
-require_once 'db.php';
+require_once '../config/db.php';
 
 try {
     // Verificar se a coluna já existe

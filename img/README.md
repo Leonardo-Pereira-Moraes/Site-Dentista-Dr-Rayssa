@@ -1,2 +1,2 @@
-<!-- Placeholder SVG para foto da Dra. Rayssa -->
-<!-- Você pode substituir esse arquivo por uma foto real em formato JPG/PNG -->
+<!-- Pasta de imagens do site -->
+<!-- A seção "Sobre" usa um placeholder em CSS; adicione aqui a foto do(a) profissional em JPG/PNG se desejar exibi-la -->

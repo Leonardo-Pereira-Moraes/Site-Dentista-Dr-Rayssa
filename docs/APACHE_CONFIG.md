@@ -1,6 +1,6 @@
 # Configuração Apache - Porta 80
 
-## Status: ✅ ALTERADO PARA PORTA 80
+## Status: ALTERADO PARA PORTA 80
 
 O Apache foi reconfigurado para rodar na porta 80 (padrão HTTP) em vez de 8081.
 
@@ -22,11 +22,11 @@ http://localhost/Prototipo-PHP/auth.html
 Em vez de:
 
 ```
-http://localhost:8081/Prototipo-PHP/auth.html  ❌ NÃO PRECISA MAIS
+http://localhost:8081/Prototipo-PHP/auth.html  (NÃO PRECISA MAIS)
 ```
 
 ### Status do Apache
 
-- Porto: **80** ✅
-- Status: **RODANDO** ✅
-- Acesso: **SEM PORTA** ✅
+- Porto: **80**
+- Status: **RODANDO**
+- Acesso: **SEM PORTA**

@@ -3,19 +3,19 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
-ini_set('error_log', dirname(__FILE__) . '/logs/php_errors.log');
+ini_set('error_log', dirname(__FILE__, 2) . '/logs/php_errors.log');
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 
-require_once 'db.php';
-require_once 'envio_email.php';
+require_once '../config/db.php';
+require_once '../config/envio_email.php';
 
 function logEvento($tipo, $mensagem) {
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'DESCONHECIDO';
     $log = "[" . date('Y-m-d H:i:s') . "] [{$tipo}] IP: {$ip} | {$mensagem}\n";
-    error_log($log, 3, dirname(__FILE__) . '/logs/auth.log');
+    error_log($log, 3, dirname(__FILE__, 2) . '/logs/auth.log');
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

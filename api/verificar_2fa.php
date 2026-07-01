@@ -3,13 +3,13 @@
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 
-require_once 'db.php';
-require_once 'envio_email.php';
+require_once '../config/db.php';
+require_once '../config/envio_email.php';
 
 function logEvento($tipo, $mensagem) {
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'DESCONHECIDO';
     $log = "[" . date('Y-m-d H:i:s') . "] [{$tipo}] IP: {$ip} | {$mensagem}\n";
-    error_log($log, 3, dirname(__FILE__) . '/logs/2fa.log');
+    error_log($log, 3, dirname(__FILE__, 2) . '/logs/2fa.log');
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Cadastro - Dra. Rayssa Silveira</title>
-    
+    <title>Login & Cadastro - Clínica OdontoKids</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     
     <style>
         :root {
@@ -347,20 +348,20 @@
     <div class="auth-container">
         <!-- HEADER -->
         <div class="auth-header">
-            <h1>🦷 Dra. Rayssa Silveira</h1>
+            <h1><i class="bi bi-tooth"></i> Clínica OdontoKids</h1>
             <p>Sistema de Agendamentos</p>
         </div>
 
         <!-- TABS -->
         <div class="auth-tabs">
             <button class="auth-tab-btn active" data-tab="login">
-                🔓 Login
+                <i class="bi bi-box-arrow-in-right"></i> Login
             </button>
             <button class="auth-tab-btn" data-tab="cadastro">
-                ✏️ Cadastro
+                <i class="bi bi-pencil-square"></i> Cadastro
             </button>
             <button class="auth-tab-btn" data-tab="2fa" id="tab2fa" style="display: none;">
-                🔐 Verificação 2FA
+                <i class="bi bi-shield-lock"></i> Verificação 2FA
             </button>
         </div>
 
@@ -375,36 +376,36 @@
 
                     <!-- Email -->
                     <div class="form-group">
-                        <label class="form-label">📧 Email</label>
-                        <input 
-                            type="email" 
-                            class="form-control" 
-                            id="loginEmail" 
-                            placeholder="seu@email.com" 
+                        <label class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="loginEmail"
+                            placeholder="seu@email.com"
                             required
                         >
                     </div>
 
                     <!-- Senha -->
                     <div class="form-group">
-                        <label class="form-label">🔐 Senha</label>
+                        <label class="form-label"><i class="bi bi-lock"></i> Senha</label>
                         <div class="password-toggle">
-                            <input 
-                                type="password" 
-                                class="form-control" 
-                                id="loginSenha" 
-                                placeholder="Sua senha" 
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="loginSenha"
+                                placeholder="Sua senha"
                                 required
                             >
                             <button type="button" class="toggle-btn" onclick="togglePassword('loginSenha')">
-                                👁️
+                                <i class="bi bi-eye"></i>
                             </button>
                         </div>
                     </div>
 
                     <!-- Botão -->
                     <button type="submit" class="btn-auth btn-login" id="btnLogin">
-                        🔓 Entrar
+                        <i class="bi bi-box-arrow-in-right"></i> Entrar
                     </button>
 
                     <div class="loading" id="loadingLogin"></div>
@@ -416,7 +417,7 @@
 
                     <!-- Info -->
                     <div class="info-box">
-                        ℹ️ <strong>Demo:</strong> Use email: <code>demo@test.com</code> | Senha: <code>123456</code>
+                        <i class="bi bi-info-circle"></i> <strong>Demo:</strong> Use email: <code>demo@test.com</code> | Senha: <code>123456</code>
                     </div>
                 </form>
             </div>
@@ -429,53 +430,53 @@
 
                     <!-- Nome -->
                     <div class="form-group">
-                        <label class="form-label">👤 Nome Completo</label>
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="cadastroNome" 
-                            placeholder="Seu nome" 
+                        <label class="form-label"><i class="bi bi-person"></i> Nome Completo</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="cadastroNome"
+                            placeholder="Seu nome"
                             required
                         >
                     </div>
 
                     <!-- Email -->
                     <div class="form-group">
-                        <label class="form-label">📧 Email</label>
-                        <input 
-                            type="email" 
-                            class="form-control" 
-                            id="cadastroEmail" 
-                            placeholder="seu@email.com" 
+                        <label class="form-label"><i class="bi bi-envelope"></i> Email</label>
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="cadastroEmail"
+                            placeholder="seu@email.com"
                             required
                         >
                     </div>
 
                     <!-- Telefone -->
                     <div class="form-group">
-                        <label class="form-label">📱 Telefone/WhatsApp</label>
-                        <input 
-                            type="tel" 
-                            class="form-control" 
-                            id="cadastroTelefone" 
-                            placeholder="(64) 99973-4194" 
+                        <label class="form-label"><i class="bi bi-telephone"></i> Telefone/WhatsApp</label>
+                        <input
+                            type="tel"
+                            class="form-control"
+                            id="cadastroTelefone"
+                            placeholder="(00) 00000-0000"
                             required
                         >
                     </div>
 
                     <!-- Senha -->
                     <div class="form-group">
-                        <label class="form-label">🔐 Senha</label>
+                        <label class="form-label"><i class="bi bi-lock"></i> Senha</label>
                         <div class="password-toggle">
-                            <input 
-                                type="password" 
-                                class="form-control" 
-                                id="cadastroSenha" 
-                                placeholder="Mínimo 6 caracteres" 
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="cadastroSenha"
+                                placeholder="Mínimo 6 caracteres"
                                 required
                             >
                             <button type="button" class="toggle-btn" onclick="togglePassword('cadastroSenha')">
-                                👁️
+                                <i class="bi bi-eye"></i>
                             </button>
                         </div>
                         <small style="color: #999; margin-top: 5px; display: block;">
@@ -485,24 +486,24 @@
 
                     <!-- Confirmar Senha -->
                     <div class="form-group">
-                        <label class="form-label">🔐 Confirmar Senha</label>
+                        <label class="form-label"><i class="bi bi-lock"></i> Confirmar Senha</label>
                         <div class="password-toggle">
-                            <input 
-                                type="password" 
-                                class="form-control" 
-                                id="cadastroConfirme" 
-                                placeholder="Confirme sua senha" 
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="cadastroConfirme"
+                                placeholder="Confirme sua senha"
                                 required
                             >
                             <button type="button" class="toggle-btn" onclick="togglePassword('cadastroConfirme')">
-                                👁️
+                                <i class="bi bi-eye"></i>
                             </button>
                         </div>
                     </div>
 
                     <!-- Botão -->
                     <button type="submit" class="btn-auth btn-login" id="btnCadastro">
-                        ✏️ Cadastrar-se
+                        <i class="bi bi-pencil-square"></i> Cadastrar-se
                     </button>
 
                     <div class="loading" id="loadingCadastro"></div>
@@ -522,14 +523,14 @@
 
                     <!-- Mensagem -->
                     <div style="background: #e3f2fd; border-left: 4px solid #4A90E2; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-                        <p style="margin: 0; color: #1565c0;"><strong>🔐 Verificação em Duas Etapas</strong></p>
+                        <p style="margin: 0; color: #1565c0;"><strong><i class="bi bi-shield-lock"></i> Verificação em Duas Etapas</strong></p>
                         <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #1565c0;">Um código de autenticação foi enviado para:</p>
                         <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #1565c0;" id="email2FA"><strong></strong></p>
                     </div>
 
                     <!-- Código 2FA -->
                     <div class="form-group">
-                        <label class="form-label">🔑 Código de Autenticação</label>
+                        <label class="form-label"><i class="bi bi-key"></i> Código de Autenticação</label>
                         <input 
                             type="text" 
                             class="form-control" 
@@ -554,7 +555,7 @@
                                 style="margin-right: 10px; cursor: pointer;"
                             >
                             <label class="form-label" style="margin: 0; cursor: pointer; user-select: none;" for="manterLogin">
-                                ✓ Manter login (não sair por 30 dias)
+                                Manter login (não sair por 30 dias)
                             </label>
                         </div>
                         <small class="form-text text-muted" style="display: block; margin-top: 5px;">Recomendado apenas em dispositivos pessoais</small>
@@ -562,7 +563,7 @@
 
                     <!-- Botão Verificar -->
                     <button type="submit" class="btn-auth btn-login" id="btn2FA">
-                        🔓 Verificar
+                        <i class="bi bi-check2-circle"></i> Verificar
                     </button>
 
                     <div class="loading" id="loading2FA"></div>
@@ -578,7 +579,7 @@
 
         <!-- Voltar -->
         <div style="padding: 0 30px 20px;">
-            <a href="index.html" class="btn-voltar">← Voltar para Home</a>
+            <a href="../index.html" class="btn-voltar">← Voltar para Home</a>
         </div>
     </div>
 
@@ -645,15 +646,15 @@
             const loading = document.getElementById('loadingLogin');
 
             if (!email || !senha) {
-                mostrarAlerta('danger', '❌ Preencha todos os campos!', 'login');
+                mostrarAlerta('danger', 'Preencha todos os campos!', 'login');
                 return;
             }
 
             desabilitarBtn(btn, loading, true);
-            const data = await fazerRequisicao('processar_auth.php', { acao: 'login', email, senha });
+            const data = await fazerRequisicao('../api/processar_auth.php', { acao: 'login', email, senha });
 
             if (data.sucesso && data.requer_2fa) {
-                mostrarAlerta('info', '📧 Código enviado!', 'login');
+                mostrarAlerta('info', 'Código enviado!', 'login');
                 sessionStorage.setItem('email_2fa', email);
                 setTimeout(() => {
                     document.getElementById('email2FA').textContent = data.email_parcial;
@@ -663,10 +664,10 @@
                 }, 1000);
             } else if (data.sucesso) {
                 localStorage.setItem('usuario', JSON.stringify(data.usuario));
-                mostrarAlerta('success', '✅ Login realizado!', 'login');
+                mostrarAlerta('success', 'Login realizado!', 'login');
                 setTimeout(() => window.location.href = 'dashboard.html', 1500);
             } else {
-                mostrarAlerta('danger', '❌ ' + (data.erro || 'Erro no login'), 'login');
+                mostrarAlerta('danger', data.erro || 'Erro no login', 'login');
             }
             desabilitarBtn(btn, loading, false);
         });
@@ -684,38 +685,38 @@
             const loading = document.getElementById('loadingCadastro');
 
             if (!nome || !email || !telefone || !senha || !confirme) {
-                mostrarAlerta('danger', '❌ Preencha todos!', 'cadastro');
+                mostrarAlerta('danger', 'Preencha todos!', 'cadastro');
                 return;
             }
 
             if (senha.length < 6) {
-                mostrarAlerta('warning', '⚠️ Mínimo 6 caracteres', 'cadastro');
+                mostrarAlerta('warning', 'Mínimo 6 caracteres', 'cadastro');
                 return;
             }
 
             if (senha !== confirme) {
-                mostrarAlerta('danger', '❌ Senhas não conferem!', 'cadastro');
+                mostrarAlerta('danger', 'Senhas não conferem!', 'cadastro');
                 return;
             }
 
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                mostrarAlerta('danger', '❌ Email inválido!', 'cadastro');
+                mostrarAlerta('danger', 'Email inválido!', 'cadastro');
                 return;
             }
 
             desabilitarBtn(btn, loading, true);
-            const data = await fazerRequisicao('processar_auth.php', { 
-                acao: 'cadastro', nome, email, telefone, senha 
+            const data = await fazerRequisicao('../api/processar_auth.php', {
+                acao: 'cadastro', nome, email, telefone, senha
             });
 
             if (data.sucesso) {
-                mostrarAlerta('success', '✅ Cadastro realizado!', 'cadastro');
+                mostrarAlerta('success', 'Cadastro realizado!', 'cadastro');
                 setTimeout(() => {
                     mudarTab('login');
                     document.getElementById('formCadastro').reset();
                 }, 1500);
             } else {
-                mostrarAlerta('danger', '❌ ' + (data.erro || 'Erro ao cadastrar'), 'cadastro');
+                mostrarAlerta('danger', data.erro || 'Erro ao cadastrar', 'cadastro');
             }
             desabilitarBtn(btn, loading, false);
         });
@@ -729,28 +730,28 @@
             const loading = document.getElementById('loading2FA');
 
             if (!codigo) {
-                mostrarAlerta('danger', '❌ Digite o código!', '2FA');
+                mostrarAlerta('danger', 'Digite o código!', '2FA');
                 return;
             }
 
             if (codigo.length !== 6 || !/^\d+$/.test(codigo)) {
-                mostrarAlerta('danger', '❌ 6 dígitos!', '2FA');
+                mostrarAlerta('danger', '6 dígitos!', '2FA');
                 return;
             }
 
             desabilitarBtn(btn, loading, true);
-            const data = await fazerRequisicao('verificar_2fa.php', { 
-                codigo, email, manter_login: manterLogin 
+            const data = await fazerRequisicao('../api/verificar_2fa.php', {
+                codigo, email, manter_login: manterLogin
             });
 
             if (data.sucesso) {
                 localStorage.setItem('usuario', JSON.stringify(data.usuario));
-                const msg = manterLogin ? '✅ Mantido conectado!' : '✅ Login sucesso!';
+                const msg = manterLogin ? 'Mantido conectado!' : 'Login sucesso!';
                 mostrarAlerta('success', msg, '2FA');
                 sessionStorage.removeItem('email_2fa');
                 setTimeout(() => window.location.href = 'dashboard.html', 1500);
             } else {
-                mostrarAlerta('danger', '❌ ' + (data.erro || 'Código inválido'), '2FA');
+                mostrarAlerta('danger', data.erro || 'Código inválido', '2FA');
             }
             desabilitarBtn(btn, loading, false);
         });
