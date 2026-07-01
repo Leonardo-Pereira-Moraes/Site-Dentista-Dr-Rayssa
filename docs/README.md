@@ -64,7 +64,7 @@ Sistema de agendamento de consultas odontopediátricas para clínicas infantis.
    - Senha: definida ao executar `php tools/criar_admin.php`
 
 4. **Testar o Sistema:**
-   - Acesse `http://localhost/index.html`
+   - Acesse `http://localhost/<pasta-do-projeto-dentro-de-htdocs>/index.html`
    - Clique em "Entrar" e depois "Criar Conta" para cadastrar usuário
    - Faça login e teste agendamentos
    - Como admin, acesse `pages/admin_dashboard.html`

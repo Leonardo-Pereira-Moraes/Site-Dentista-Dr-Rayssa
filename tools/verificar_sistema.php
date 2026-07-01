@@ -111,7 +111,7 @@ foreach ($files as $file) {
 // ===== INSTRUÇÕES FINAIS =====
 echo "\nStatus do Sistema:\n";
 echo "Para testar completamente:\n";
-echo "1. Acesse http://localhost/index.html\n";
+echo "1. Acesse http://localhost/<pasta-do-projeto>/index.html\n";
 echo "2. Clique em 'Entrar' e depois em 'Criar Conta'\n";
 echo "3. Faça login com suas credenciais\n";
 echo "4. Vá para agendamentos.html e faça um agendamento\n";
