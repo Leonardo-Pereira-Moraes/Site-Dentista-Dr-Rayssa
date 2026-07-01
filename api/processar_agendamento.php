@@ -104,8 +104,8 @@ if (empty($_SESSION['csrf_token'])) {
 $csrf_token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
 
 // Para requisições JSON, tentar pegar do header
-if (empty($csrf_token) && !empty(getallheaders()['X-CSRF-Token'])) {
-    $csrf_token = getallheaders()['X-CSRF-Token'];
+if (empty($csrf_token) && !empty($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+    $csrf_token = $_SERVER['HTTP_X_CSRF_TOKEN'];
 }
 
 // Se for ambiente de desenvolvimento, permitir sem CSRF

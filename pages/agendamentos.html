@@ -408,7 +408,7 @@
             try {
                 const response = await fetch('../api/verificar_autenticacao.php');
                 const data = await response.json();
-                
+
                 if (!data.autenticado) {
                     // Usuário não está logado
                     mostrarModalLogin();
@@ -416,6 +416,9 @@
                 } else {
                     // Usuário está logado, pré-preencher formulário
                     preencherDadosUsuario(data.usuario);
+                    if (data.csrf_token) {
+                        localStorage.setItem('csrf_token', data.csrf_token);
+                    }
                     return true;
                 }
             } catch (error) {
@@ -483,14 +486,9 @@
             verificarAutenticacao();
         });
 
-        // ===== GERAR/OBTER CSRF TOKEN =====
+        // ===== OBTER CSRF TOKEN (definido pelo servidor em verificarAutenticacao) =====
         function obterCSRFToken() {
-            let token = localStorage.getItem('csrf_token');
-            if (!token) {
-                token = 'dev_' + Math.random().toString(36).substr(2, 9);
-                localStorage.setItem('csrf_token', token);
-            }
-            return token;
+            return localStorage.getItem('csrf_token') || '';
         }
 
         // Fazer a data mínima ser hoje

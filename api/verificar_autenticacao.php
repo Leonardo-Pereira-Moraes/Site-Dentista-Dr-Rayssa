@@ -20,10 +20,15 @@ if (!empty($_SESSION['usuario_id'])) {
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($usuario) {
+            if (empty($_SESSION['csrf_token'])) {
+                $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+            }
+
             http_response_code(200);
             echo json_encode([
                 'autenticado' => true,
                 'is_admin' => (bool)$usuario['is_admin'],
+                'csrf_token' => $_SESSION['csrf_token'],
                 'usuario' => [
                     'id' => $_SESSION['usuario_id'],
                     'nome' => $usuario['nome'],

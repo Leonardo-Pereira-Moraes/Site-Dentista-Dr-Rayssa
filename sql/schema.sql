@@ -1,7 +1,6 @@
--- Criar banco de dados
-CREATE DATABASE IF NOT EXISTS prototipo_php CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE prototipo_php;
+-- No InfinityFree o banco já é criado via vPanel (não é possível criar bancos por SQL).
+-- Selecione o banco existente no phpMyAdmin antes de importar este arquivo.
+-- (linhas de CREATE DATABASE / USE removidas de propósito)
 
 -- Tabela de usuários
 CREATE TABLE IF NOT EXISTS usuarios (
