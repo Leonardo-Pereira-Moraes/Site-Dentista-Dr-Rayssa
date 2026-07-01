@@ -10,7 +10,6 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 
 require_once '../config/db.php';
-require_once '../config/envio_email.php';
 
 function logEvento($tipo, $mensagem) {
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'DESCONHECIDO';
@@ -74,37 +73,23 @@ function processarLogin($dados) {
         enviareErro('Email ou senha incorretos', 401);
     }
 
-    try {
-        $codigo = EnvioEmail::gerarCodigo2FA();
-        $expira = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+    session_start();
+    $_SESSION['usuario_id'] = $usuario['id'];
+    $_SESSION['usuario_nome'] = $usuario['nome'];
+    $_SESSION['usuario_email'] = $usuario['email'];
+    $_SESSION['login_time'] = time();
 
-        $stmt = $pdo->prepare("DELETE FROM autenticacao_2fa WHERE usuario_id = ? AND expirado_em < NOW()");
-        $stmt->execute([$usuario['id']]);
-
-        $stmt = $pdo->prepare("
-            INSERT INTO autenticacao_2fa (usuario_id, codigo, ip_origem, criado_em, expirado_em, verificado, tentativas)
-            VALUES (?, ?, ?, NOW(), ?, FALSE, 0)
-        ");
-        $stmt->execute([$usuario['id'], $codigo, $_SERVER['REMOTE_ADDR'] ?? 'DESCONHECIDO', $expira]);
-
-        $envio = new EnvioEmail();
-        if (!$envio->enviarCodigo2FA($usuario['nome'], $usuario['email'], $codigo)) {
-            logEvento('ERRO', "Falha ao enviar 2FA: {$email}");
-            enviareErro('Erro ao enviar código', 500);
-        }
-
-        http_response_code(200);
-        echo json_encode([
-            'sucesso' => true,
-            'requer_2fa' => true,
-            'mensagem' => 'Código enviado para seu email',
-            'email_parcial' => substr($email, 0, 3) . '***' . substr($email, strrpos($email, '@'))
-        ]);
-        logEvento('LOGIN', "2FA enviado: {$email}");
-    } catch (PDOException $e) {
-        logEvento('ERRO', 'Erro ao gerar 2FA');
-        enviareErro('Erro interno do servidor', 500);
-    }
+    http_response_code(200);
+    echo json_encode([
+        'sucesso' => true,
+        'mensagem' => 'Login realizado com sucesso!',
+        'usuario' => [
+            'id' => $usuario['id'],
+            'nome' => $usuario['nome'],
+            'email' => $usuario['email']
+        ]
+    ]);
+    logEvento('LOGIN', "Login bem-sucedido: {$email}");
 }
 
 function processarCadastro($dados) {

@@ -440,43 +440,6 @@
 
         // ===== INICIALIZAR =====
         window.addEventListener('load', carregarDadosUsuario);
-                return; // Manter mensagem padrão
-            }
-
-            const agendamentos = JSON.parse(agendamentosJson);
-
-            if (agendamentos.length === 0) {
-                return;
-            }
-
-            lista.innerHTML = '';
-            agendamentos.forEach((agendamento, index) => {
-                const statusClass = agendamento.status === 'confirmado' ? 'confirmado' : 'pendente';
-                const statusText = agendamento.status === 'confirmado' ? 'Confirmado' : 'Pendente';
-                
-                const item = document.createElement('li');
-                item.className = `agendamento-item ${statusClass}`;
-                item.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 style="margin: 0 0 5px 0; color: #333;">
-                                ${agendamento.nomeCrianca}
-                            </h6>
-                            <p style="margin: 0; font-size: 0.9rem; color: #666;">
-                                ${agendamento.data} às ${agendamento.hora}
-                            </p>
-                            <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: #999;">
-                                ${agendamento.servico}
-                            </p>
-                        </div>
-                        <span class="status-badge status-${agendamento.status}">
-                            ${statusText}
-                        </span>
-                    </div>
-                `;
-                lista.appendChild(item);
-            });
-        }
     </script>
 </body>
 </html>

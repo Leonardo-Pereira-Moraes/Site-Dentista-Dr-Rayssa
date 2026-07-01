@@ -27,8 +27,8 @@ try {
     } else {
         // Criar novo usuário admin
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha_hash, is_admin, data_cadastro, verificado) VALUES (?, ?, ?, TRUE, NOW(), TRUE)");
-        $stmt->execute([$nome, $email, $senhaHash]);
+        $stmt = $pdo->prepare("INSERT INTO usuarios (id, nome, email, senha_hash, is_admin, data_cadastro, verificado) VALUES (?, ?, ?, ?, TRUE, NOW(), TRUE)");
+        $stmt->execute([uniqid('user_', true), $nome, $email, $senhaHash]);
 
         echo "Usuário admin criado com sucesso!\n";
         echo "Email: $email\n";
@@ -38,5 +38,18 @@ try {
 
 } catch (PDOException $e) {
     echo "Erro ao configurar usuário admin: " . $e->getMessage() . "\n";
+}
+
+// Criar usuário demo se não existir
+$emailDemo = 'demo@test.com';
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM usuarios WHERE email = ?");
+$stmt->execute([$emailDemo]);
+if ($stmt->fetchColumn() == 0) {
+    $stmt = $pdo->prepare("
+        INSERT INTO usuarios (id, nome, email, telefone, senha_hash, data_cadastro, verificado, is_admin)
+        VALUES (?, 'Usuário Demo', ?, '', ?, NOW(), TRUE, FALSE)
+    ");
+    $stmt->execute([uniqid('user_', true), $emailDemo, password_hash('123456', PASSWORD_BCRYPT)]);
+    echo "Usuario demo criado: demo@test.com / 123456\n";
 }
 ?>
